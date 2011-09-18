@@ -44,7 +44,7 @@ public:
    *
    * @retval true Pressed since this method was last called
    */
-  bool wasPressed(void) { bool result = edge_pressed; edge_pressed = false; return result; }
+  bool wasPressed(void);
 
   /**
    * Get current known state of the button

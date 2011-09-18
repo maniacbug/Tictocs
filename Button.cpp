@@ -33,4 +33,13 @@ void Button::update(void)
 
 /****************************************************************************/
 
+bool Button::wasPressed(void) 
+{ 
+  bool result = edge_pressed; 
+  edge_pressed = false; 
+  return result; 
+}
+
+/****************************************************************************/
+
 // vim:cin:ai:sts=2 sw=2 ft=cpp
