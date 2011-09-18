@@ -15,8 +15,9 @@ class Timer: public IUpdate
 {
 private:
   unsigned long interval; /**< How long to wait before firing */
-  unsigned long last_updated;
-  bool fired;
+  unsigned long last_updated; /**< When was the timer last updated */
+  bool fired; /**< Has the timer fired since the user last checked? */
+  bool enabled; /**< Is the timer enabled so it can run? */
 protected:
   /**
    * Triggered when timer is fired.  Override to implement special behaviour
@@ -29,7 +30,7 @@ protected:
    void update(void) 
    {
      unsigned long now = millis();
-     if ( now - last_updated >= interval )
+     if ( enabled && now - last_updated >= interval )
      {
        last_updated += interval;
        fired = true;
@@ -42,7 +43,7 @@ public:
    *
    * @param _interval How long to wait before firing
    */
-  Timer(unsigned long _interval): interval(_interval), last_updated(0), fired(false) {}
+  Timer(unsigned long _interval): interval(_interval), last_updated(0), fired(false), enabled(true) {}
 
   /**
    * Test whether the timer has fired since we last asked
@@ -54,7 +55,19 @@ public:
   /**
    * Reset timer back to the start
    */
-  void reset(void) { last_updated = millis(); }
+  void reset(void) { last_updated = millis(); enabled = true; }
+
+  /**
+   * Set new interval value (and reset)
+   *
+   * @param _interval New duration for the timer in ms
+   */
+  void setInterval(unsigned long _interval) { interval = _interval; reset(); }
+
+  /**
+   * Disables timer so it will never fire.  Call reset() to enable.
+   */
+  void disable(void) { enabled = false; }
 };
 
 #endif // __TIMER_H__

@@ -107,5 +107,38 @@ public:
     
     TS_ASSERT_EQUALS( pt->wasFired(), false );
   }
+  void testChangeInterval( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    pt->setInterval(100);
+    delay(150);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), true );
+  }
+  void testDisable( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    pt->disable();
+    delay(250);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), false );
+  }
+  void testDisableAndEnable( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    pt->disable();
+    delay(250);
+    pmanager->update();
+    pt->reset();
+    delay(250);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), true );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
