@@ -44,5 +44,14 @@ public:
     
     TS_ASSERT_EQUALS( pt->wasFired(), false );
   }
+  void testFired( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    delay(250);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), true );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
