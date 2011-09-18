@@ -1,0 +1,41 @@
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+
+// Project includes
+#include <SketchThread.h>
+
+using namespace std;
+
+/****************************************************************************/
+
+extern "C" void setup(void)
+{
+}
+
+/****************************************************************************/
+
+extern "C" void loop(void)
+{
+}
+
+/****************************************************************************/
+
+class IntegrationTestSuite: public CxxTest::TestSuite
+{
+  SketchThread t;
+public:
+  void setUp()
+  {
+  }
+
+  void testEmpty( void )
+  {
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
