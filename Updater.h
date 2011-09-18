@@ -14,8 +14,9 @@ class IUpdate;
 
 class Updater
 {
-private:
+public:
   static const int max_objects = 10; /**< Max # of objects we can handle */
+private:
   IUpdate* objects[max_objects]; /**< Set of known objects */
   IUpdate** end_objects; /**< Pointer just past the last known object */
 protected:
