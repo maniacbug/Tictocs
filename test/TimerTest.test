@@ -18,12 +18,20 @@ extern "C" void mock_time_reset(void);
 
 class TimerTestSuite: public CxxTest::TestSuite
 {
+  struct TestTimer: public Timer
+  {
+    int num_fired;
+    TestTimer(unsigned long _interval): Timer(_interval), num_fired(0) {}
+    void onFired(void) { ++num_fired; }
+  };
   Timer* pt;
+  TestTimer* pot;
   Updater* pmanager;
 public:
   void setUp()
   {
     pt = new Timer(200);
+    pot = new TestTimer(200);
     pmanager = new Updater();
     
     mock_time_reset();
@@ -31,6 +39,7 @@ public:
   void tearDown()
   {
     delete pmanager;
+    delete pot;
     delete pt;
   }
 
@@ -67,6 +76,15 @@ public:
     
     TS_ASSERT_EQUALS( pt->wasFired(), true );
     TS_ASSERT_EQUALS( pt->wasFired(), false );
+  }
+  void testFiredOverride( void )
+  {
+    pmanager->add(pot);
+    pmanager->update();
+    delay(250);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pot->num_fired, 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

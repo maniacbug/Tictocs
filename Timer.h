@@ -19,6 +19,11 @@ private:
   bool fired;
 protected:
   /**
+   * Triggered when timer is fired.  Override to implement special behaviour
+   */
+   virtual void onFired(void) {}
+  
+   /**
    * Call regularly to update status of timer
    */
    void update(void) 
@@ -28,7 +33,7 @@ protected:
      {
        last_updated += interval;
        fired = true;
-       // onFired();
+       onFired();
      }
    }
 public:
