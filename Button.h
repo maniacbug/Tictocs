@@ -38,7 +38,7 @@ public:
    *
    * @param _pin Which pin the button is monitoring
    */
-  Button(int _pin, unsigned long _interval): pin(_pin), interval(_interval), timer(0), time_pressed(0), state(HIGH), edge_pressed(false), edge_released(false) {}
+  Button(int _pin, unsigned long _interval);
 
   /**
    * Prepare the button.  Sets the pin as output and engages the pull-up resistor
@@ -69,7 +69,7 @@ public:
    *
    * @retval true Button is currently being pressed
    */
-  bool isPressed(void) const { return state == LOW; }
+  bool isPressed(void) const;
 };
 
 #endif // __BUTTON_H__

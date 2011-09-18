@@ -8,6 +8,12 @@
 
 /****************************************************************************/
 
+Button::Button(int _pin, unsigned long _interval): pin(_pin), interval(_interval), timer(0), time_pressed(0), state(HIGH), edge_pressed(false), edge_released(false) 
+{
+}
+
+/****************************************************************************/
+
 void Button::begin(void)
 {
   pinMode(pin,INPUT);
@@ -39,6 +45,13 @@ void Button::update(void)
       onPressed();
     }
   }
+}
+
+/****************************************************************************/
+
+bool Button::isPressed(void) const 
+{ 
+  return state == LOW; 
 }
 
 /****************************************************************************/
