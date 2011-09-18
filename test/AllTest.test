@@ -8,11 +8,23 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <IUpdate.h>
 
 using namespace std;
 
 class AllTestSuite: public CxxTest::TestSuite
 {
+  struct GetsUpdated: public IUpdate
+  {
+    bool was_updated;
+    GetsUpdated(void): was_updated(false) 
+    {
+    }
+    void update(void) 
+    {
+      was_updated = true;
+    }
+  };
 public:
   void setUp()
   {
@@ -20,6 +32,9 @@ public:
 
   void testEmpty( void )
   {
+    GetsUpdated o;
+
+    TS_ASSERT_EQUALS( o.was_updated, false );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
