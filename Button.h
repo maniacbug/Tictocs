@@ -47,6 +47,13 @@ public:
   bool wasPressed(void);
 
   /**
+   * Test whether the button has been released since we last asked
+   *
+   * @retval true Released since this method was last called
+   */
+  bool wasReleased(void);
+
+  /**
    * Get current known state of the button
    *
    * @retval true Button is currently being pressed

@@ -109,7 +109,20 @@ public:
     
     TS_ASSERT_EQUALS( pb->wasPressed(), true );
   }
+  
+  void testWasNotReleased( void )
+  {
+    pmanager->add(pb);
+    pmanager->update();
+    delay(30); 
+    pmanager->update();
+    // Now we have been pressed, release
+    thePins.hwSetDigital(1,1);
+    delay(10); 
+    pmanager->update();
 
+    TS_ASSERT_EQUALS( pb->wasReleased(), false );
+  }
 
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

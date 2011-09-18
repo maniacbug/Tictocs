@@ -25,8 +25,11 @@ void Button::update(void)
   else if ( time_now - timer > interval )
   {
     state = state_now;
+    timer = time_now;
     
-    if (! state)
+    if (state)
+      edge_released = true;
+    else
       edge_pressed = true;
   }
 }
@@ -37,6 +40,15 @@ bool Button::wasPressed(void)
 { 
   bool result = edge_pressed; 
   edge_pressed = false; 
+  return result; 
+}
+
+/****************************************************************************/
+
+bool Button::wasReleased(void) 
+{ 
+  bool result = edge_released; 
+  edge_released = false; 
   return result; 
 }
 
