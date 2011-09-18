@@ -42,6 +42,15 @@ public:
   {
     TS_ASSERT_EQUALS( p->was_updated, false );
   }
+  
+  void testUpdate( void )
+  {
+    IUpdate* piu = dynamic_cast<IUpdate*>(p);
+    piu->update();
+
+    TS_ASSERT_EQUALS( p->was_updated, true );
+  }
+
 
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
