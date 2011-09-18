@@ -8,14 +8,21 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Button.h>
 
 using namespace std;
 
 class ButtonTestSuite: public CxxTest::TestSuite
 {
+  Button* pb;
 public:
   void setUp()
   {
+    pb = new Button(1);
+  }
+  void tearDown()
+  {
+    delete pb;
   }
 
   void testEmpty( void )
