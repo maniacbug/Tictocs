@@ -23,20 +23,6 @@ protected:
    * Triggered when timer is fired.  Override to implement special behaviour
    */
    virtual void onFired(void) {}
-  
-   /**
-   * Call regularly to update status of timer
-   */
-   void update(void) 
-   {
-     unsigned long now = millis();
-     if ( enabled && now - last_updated >= interval )
-     {
-       last_updated += interval;
-       fired = true;
-       onFired();
-     }
-   }
 public:
   /**
    * Constructor
@@ -44,6 +30,20 @@ public:
    * @param _interval How long to wait before firing
    */
   Timer(unsigned long _interval): interval(_interval), last_updated(0), fired(false), enabled(true) {}
+
+  /**
+   * Call regularly to update status of timer
+   */
+  void update(void) 
+  {
+    unsigned long now = millis();
+    if ( enabled && now - last_updated >= interval )
+    {
+      last_updated += interval;
+      fired = true;
+      onFired();
+    }
+  }
 
   /**
    * Test whether the timer has fired since we last asked

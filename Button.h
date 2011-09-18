@@ -14,12 +14,12 @@
 class Button: public IUpdate
 {
 private:
-  int pin;
-  unsigned long interval;
-  unsigned long timer;
-  int state;
-  bool edge_pressed;
-  bool edge_released;
+  int pin; /**< Which hardware pin this button is connected to. **/
+  unsigned long interval; /**< How long the button must be pressed/released before the state change is accepted */
+  unsigned long timer; /**< How long the button has been in a new state but not yet accepted */
+  int state; /**< Current accepted state of the button, LOW = pressed */
+  bool edge_pressed; /**< Has the button been pressed since the user last asked? */
+  bool edge_released; /**< Has the button been released since the user last asked? */
 protected:
   virtual void onPressed(void) {}
   virtual void onReleased(void) {}
