@@ -25,16 +25,23 @@ class AllTestSuite: public CxxTest::TestSuite
       was_updated = true;
     }
   };
+
+  GetsUpdated* p;
 public:
   void setUp()
   {
+    p = new GetsUpdated();
+  }
+
+  void tearDown()
+  {
+    delete p;
   }
 
   void testEmpty( void )
   {
-    GetsUpdated o;
-
-    TS_ASSERT_EQUALS( o.was_updated, false );
+    TS_ASSERT_EQUALS( p->was_updated, false );
   }
+
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
