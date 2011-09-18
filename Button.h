@@ -22,6 +22,7 @@ private:
   bool edge_released;
 protected:
   virtual void onPressed(void) {}
+  virtual void onReleased(void) {}
 public:
   /**
    * Constructor

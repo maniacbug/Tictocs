@@ -28,7 +28,10 @@ void Button::update(void)
     timer = time_now;
     
     if (state)
+    {
       edge_released = true;
+      onReleased();
+    }
     else
     {
       edge_pressed = true;

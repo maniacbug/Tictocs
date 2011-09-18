@@ -22,10 +22,15 @@ class ButtonTestSuite: public CxxTest::TestSuite
   struct TestButton: public Button
   {
     int pressed;
-    TestButton(int _pin): Button(_pin,20), pressed(0) {}
+    int released;
+    TestButton(int _pin): Button(_pin,20), pressed(0), released(0) {}
     void onPressed(void)
     {
       ++pressed;
+    }
+    void onReleased(void)
+    {
+      ++released;
     }
   };
 
@@ -153,6 +158,32 @@ public:
     pmanager->update();
 
     TS_ASSERT_EQUALS( ptestbutton->pressed, 0 );
+  }
+
+  void testOverrideNotReleased( void )
+  {
+    pmanager->add(ptestbutton);
+    pmanager->update();
+    delay(30); 
+    pmanager->update();
+    thePins.hwSetDigital(2,1);
+    delay(10); 
+    pmanager->update();
+
+    TS_ASSERT_EQUALS( ptestbutton->released , 0 );
+  }
+
+  void testOverrideReleased( void )
+  {
+    pmanager->add(ptestbutton);
+    pmanager->update();
+    delay(30); 
+    pmanager->update();
+    thePins.hwSetDigital(2,1);
+    delay(30); 
+    pmanager->update();
+
+    TS_ASSERT_EQUALS( ptestbutton->released , 1 );
   }
 
 };
