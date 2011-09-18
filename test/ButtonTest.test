@@ -186,5 +186,25 @@ public:
     TS_ASSERT_EQUALS( ptestbutton->released , 1 );
   }
 
+  void testMultiplePresses( void )
+  {
+    const int num_presses = 5;
+    pmanager->add(ptestbutton);
+   
+    int i = num_presses;
+    while (i--)
+    {
+      thePins.hwSetDigital(2,0);
+      pmanager->update();
+      delay(30); 
+      pmanager->update();
+      thePins.hwSetDigital(2,1);
+      delay(30); 
+      pmanager->update();
+    }
+    TS_ASSERT_EQUALS( ptestbutton->pressed , num_presses );
+    TS_ASSERT_EQUALS( ptestbutton->released , num_presses );
+  }
+
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
