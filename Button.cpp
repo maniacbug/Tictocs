@@ -30,7 +30,10 @@ void Button::update(void)
     if (state)
       edge_released = true;
     else
+    {
       edge_pressed = true;
+      onPressed();
+    }
   }
 }
 

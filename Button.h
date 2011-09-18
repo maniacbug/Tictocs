@@ -21,6 +21,7 @@ private:
   bool edge_pressed;
   bool edge_released;
 protected:
+  virtual void onPressed(void) {}
 public:
   /**
    * Constructor

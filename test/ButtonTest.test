@@ -19,12 +19,24 @@ extern "C" void mock_time_reset(void);
 
 class ButtonTestSuite: public CxxTest::TestSuite
 {
+  struct TestButton: public Button
+  {
+    int pressed;
+    TestButton(int _pin): Button(_pin,20), pressed(0) {}
+    void onPressed(void)
+    {
+      ++pressed;
+    }
+  };
+
   Button* pb;
+  TestButton* ptestbutton;
   Updater* pmanager;
 public:
   void setUp()
   {
     pb = new Button(1,20);
+    ptestbutton = new TestButton(2);
     pmanager = new Updater();
 
     mock_time_reset();
@@ -33,6 +45,7 @@ public:
   void tearDown()
   {
     delete pmanager;
+    delete ptestbutton;
     delete pb;
     theLogger.setVerbose(false);
   }
@@ -122,6 +135,24 @@ public:
     pmanager->update();
 
     TS_ASSERT_EQUALS( pb->wasReleased(), false );
+  }
+
+  void testOverridePressed( void )
+  {
+    pmanager->add(ptestbutton);
+    pmanager->update();
+    delay(30); 
+    pmanager->update();
+
+    TS_ASSERT_EQUALS( ptestbutton->pressed, 1 );
+  }
+
+  void testOverrideNotPressed( void )
+  {
+    pmanager->add(ptestbutton);
+    pmanager->update();
+
+    TS_ASSERT_EQUALS( ptestbutton->pressed, 0 );
   }
 
 };
