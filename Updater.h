@@ -15,9 +15,9 @@ class IUpdate;
 class Updater
 {
 private:
-  static const int max_objects = 10;
-  IUpdate* objects[max_objects];
-  IUpdate** end_objects;
+  static const int max_objects = 10; /**< Max # of objects we can handle */
+  IUpdate* objects[max_objects]; /**< Set of known objects */
+  IUpdate** end_objects; /**< Pointer just past the last known object */
 protected:
 public:
   /**
@@ -31,6 +31,11 @@ public:
    * @param object Object which will be updated
    */
   void add(IUpdate* object);
+
+  /**
+   * Update all known objects
+   */
+  void update(void);
 
   /**
    * Determine the number of objects currently known t the system
