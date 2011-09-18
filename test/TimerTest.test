@@ -64,6 +64,15 @@ public:
     TS_ASSERT_EQUALS( pt->wasFired(), true );
     TS_ASSERT_EQUALS( pt->wasFired(), false );
   }
+  void testNotFired( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    delay(20);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), false );
+  }
   void testFiredTwice( void )
   {
     pmanager->add(pt);
