@@ -59,5 +59,11 @@ public:
   {
     TS_ASSERT_EQUALS( pmanager->size(), 0 );
   }
+  
+  void testAddAnItem( void )
+  {
+    pmanager->add(p);
+    TS_ASSERT_EQUALS( pmanager->size(), 1 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
