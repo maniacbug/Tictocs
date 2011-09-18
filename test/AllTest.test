@@ -38,7 +38,7 @@ public:
     delete p;
   }
 
-  void testEmpty( void )
+  void testEmptyObject( void )
   {
     TS_ASSERT_EQUALS( p->was_updated, false );
   }
