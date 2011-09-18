@@ -9,7 +9,7 @@
 class IUpdate;
 
 /**
- * Manages all IUpdate objects
+ * Manages a set of IUpdate objects
  */
 
 class Updater

@@ -17,13 +17,13 @@ class AllTestSuite: public CxxTest::TestSuite
 {
   struct GetsUpdated: public IUpdate
   {
-    bool was_updated;
-    GetsUpdated(void): was_updated(false) 
+    int was_updated;
+    GetsUpdated(void): was_updated(0) 
     {
     }
     void update(void) 
     {
-      was_updated = true;
+      ++was_updated;
     }
   };
 
@@ -44,7 +44,7 @@ public:
 
   void testEmptyObject( void )
   {
-    TS_ASSERT_EQUALS( p->was_updated, false );
+    TS_ASSERT_EQUALS( p->was_updated, 0 );
   }
   
   void testUpdate( void )
@@ -52,7 +52,7 @@ public:
     IUpdate* piu = dynamic_cast<IUpdate*>(p);
     piu->update();
 
-    TS_ASSERT_EQUALS( p->was_updated, true );
+    TS_ASSERT_EQUALS( p->was_updated, 1 );
   }
 
   void testEmptyUpdateManager( void )
@@ -70,7 +70,17 @@ public:
   {
     pmanager->add(p);
     pmanager->update();
-    TS_ASSERT_EQUALS( p->was_updated, true );
+    TS_ASSERT_EQUALS( p->was_updated, 1 );
+  }
+
+  void testMultipleUpdates( void )
+  {
+    pmanager->add(p);
+    pmanager->add(p);
+    pmanager->add(p);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( p->was_updated, 3 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
