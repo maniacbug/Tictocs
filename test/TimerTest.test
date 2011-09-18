@@ -8,25 +8,41 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Updater.h>
 #include <Timer.h>
 
 using namespace std;
 
+extern "C" void mock_time_reset(void);
+
 class TimerTestSuite: public CxxTest::TestSuite
 {
   Timer* pt;
+  Updater* pmanager;
 public:
   void setUp()
   {
-    pt = new Timer;
+    pt = new Timer(200);
+    pmanager = new Updater();
+    
+    mock_time_reset();
   }
   void tearDown()
   {
+    delete pmanager;
     delete pt;
   }
 
   void testEmpty( void )
   {
+    TS_ASSERT_EQUALS( pt->wasFired(), false );
+  }
+  void testUpdate( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), false );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
