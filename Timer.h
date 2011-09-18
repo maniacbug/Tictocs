@@ -50,6 +50,11 @@ public:
    * @retval true Timer fired since this method was last called
    */
   bool wasFired(void) { bool result = fired; fired = false; return result; }
+
+  /**
+   * Reset timer back to the start
+   */
+  void reset(void) { last_updated = millis(); }
 };
 
 #endif // __TIMER_H__

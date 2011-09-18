@@ -95,5 +95,17 @@ public:
     
     TS_ASSERT_EQUALS( pot->num_fired, 1 );
   }
+  void testReset( void )
+  {
+    pmanager->add(pt);
+    pmanager->update();
+    delay(100);
+    pmanager->update();
+    pt->reset();
+    delay(150);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pt->wasFired(), false );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
