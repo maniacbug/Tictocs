@@ -8,14 +8,21 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Timer.h>
 
 using namespace std;
 
 class TimerTestSuite: public CxxTest::TestSuite
 {
+  Timer* pt;
 public:
   void setUp()
   {
+    pt = new Timer;
+  }
+  void tearDown()
+  {
+    delete pt;
   }
 
   void testEmpty( void )
