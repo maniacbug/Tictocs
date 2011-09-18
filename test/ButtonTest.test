@@ -6,23 +6,31 @@
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <WProgram.h>
 
 // Project includes
 #include <Globals.h>
+#include <Updater.h>
 #include <Button.h>
+
 
 using namespace std;
 
 class ButtonTestSuite: public CxxTest::TestSuite
 {
   Button* pb;
+  Updater* pmanager;
 public:
   void setUp()
   {
-    pb = new Button(1);
+    pb = new Button(1,20);
+    pmanager = new Updater();
+
+    thePins.clear();
   }
   void tearDown()
   {
+    delete pmanager;
     delete pb;
     theLogger.setVerbose(false);
   }
@@ -33,5 +41,52 @@ public:
 
     TS_ASSERT_EQUALS( theLogger.lines_contain("1 INPUT"), 1 );
   }
+
+  void testInitialState( void )
+  {
+    pb->begin();
+
+    TS_ASSERT_EQUALS( pb->isPressed(), false );
+  }
+
+  void testUpdate( void )
+  {
+    pmanager->add(pb);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pb->isPressed(), false );
+  }
+
+  void testNotYetPressed( void )
+  {
+    pmanager->add(pb);
+    pmanager->update();
+    delay(10);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pb->isPressed(), false );
+  }
+
+  void testNotEverPressed( void )
+  {
+    thePins.hwSetDigital(1,1);
+    pmanager->add(pb);
+    pmanager->update();
+    delay(30);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pb->isPressed(), false );
+  }
+
+  void testPressed( void )
+  {
+    pmanager->add(pb);
+    pmanager->update();
+    delay(30);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pb->isPressed(), true );
+  }
+
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
