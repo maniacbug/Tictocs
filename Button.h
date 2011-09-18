@@ -17,24 +17,33 @@ private:
   int pin; /**< Which hardware pin this button is connected to. **/
   unsigned long interval; /**< How long the button must be pressed/released before the state change is accepted */
   unsigned long timer; /**< How long the button has been in a new state but not yet accepted */
+  unsigned long time_pressed; /**< What time the button was last pressed */
   int state; /**< Current accepted state of the button, LOW = pressed */
   bool edge_pressed; /**< Has the button been pressed since the user last asked? */
   bool edge_released; /**< Has the button been released since the user last asked? */
 protected:
+  /**
+   * Called when button is pressed
+   */
   virtual void onPressed(void) {}
-  virtual void onReleased(void) {}
+  /**
+   * Called when buttong is released
+   *
+   * @param duration How long the button was down
+   */
+  virtual void onReleased(unsigned long) {}
 public:
   /**
    * Constructor
    *
    * @param _pin Which pin the button is monitoring
    */
-  Button(int _pin, unsigned long _interval): pin(_pin), interval(_interval), timer(0), state(HIGH), edge_pressed(false), edge_released(false) {}
+  Button(int _pin, unsigned long _interval): pin(_pin), interval(_interval), timer(0), time_pressed(0), state(HIGH), edge_pressed(false), edge_released(false) {}
 
   /**
    * Prepare the button.  Sets the pin as output and engages the pull-up resistor
    */
-  void begin(void) const;
+  void begin(void);
   
   /**
    * Update the state of the button.  Call this regularly.

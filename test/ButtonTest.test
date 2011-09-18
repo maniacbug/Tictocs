@@ -28,9 +28,20 @@ class ButtonTestSuite: public CxxTest::TestSuite
     {
       ++pressed;
     }
-    void onReleased(void)
+    void onReleased(unsigned long)
     {
       ++released;
+    }
+  };
+  struct TimeoutButton: public Button
+  {
+    int released;
+    unsigned long timeout;
+    TimeoutButton(int _pin, unsigned long _timeout): Button(_pin,20), released(0), timeout(_timeout) {}
+    void onReleased(unsigned long presstime)
+    {
+      if ( presstime < timeout ) 
+	++released;
     }
   };
 
@@ -206,6 +217,36 @@ public:
     }
     TS_ASSERT_EQUALS( ptestbutton->pressed , num_presses );
     TS_ASSERT_EQUALS( ptestbutton->released , num_presses );
+  }
+  void testWithinTimeout( void )
+  {
+    TimeoutButton tob(3,1000);
+    pmanager->add(&tob);
+
+    pmanager->update();
+    delay(30); 
+    pmanager->update();
+    thePins.hwSetDigital(3,1);
+    delay(30); 
+    pmanager->update();
+
+    TS_ASSERT_EQUALS( tob.released , 1 );
+  }
+  void testOutsideTimeout( void )
+  {
+    TimeoutButton tob(3,1000);
+    pmanager->add(&tob);
+
+    pmanager->update();
+    delay(50); 
+    pmanager->update();
+    delay(1100); 
+    pmanager->update();
+    thePins.hwSetDigital(3,1);
+    delay(30); 
+    pmanager->update();
+
+    TS_ASSERT_EQUALS( tob.released , 0 );
   }
 
 };

@@ -8,7 +8,7 @@
 
 /****************************************************************************/
 
-void Button::begin(void) const
+void Button::begin(void)
 {
   pinMode(pin,INPUT);
   digitalWrite(pin,HIGH);
@@ -30,11 +30,12 @@ void Button::update(void)
     if (state)
     {
       edge_released = true;
-      onReleased();
+      onReleased(time_now - time_pressed);
     }
     else
     {
       edge_pressed = true;
+      time_pressed = time_now - interval;
       onPressed();
     }
   }
