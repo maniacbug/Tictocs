@@ -13,8 +13,8 @@ DEFINES		+= NATIVE=1 TEST=1 ;
 CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ;
 INTERNAL_MODULES = [ GLOB $(INTERNAL_DIR) : *.cpp ] ;
 TEST_MODULES	= [ GLOB $(PWD) : *.test ] ;
-EXTRA_MODULES	= [ GLOB $(PWD) : *.cpp ] $(CORE_DIR)/extras/mock_time.cpp ;
-MOCK_MODULES	= ;
+EXTRA_MODULES	= [ GLOB $(PWD) : *.cpp ] ;
+MOCK_MODULES	= $(CORE_DIR)/extras/mock_time.cpp ;
 
 SEARCH_SOURCE	= $(PWD) ;
 LOCATE_TARGET 	= $(SEARCH_SOURCE)/out ;

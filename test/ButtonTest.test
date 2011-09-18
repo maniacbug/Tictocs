@@ -13,8 +13,9 @@
 #include <Updater.h>
 #include <Button.h>
 
-
 using namespace std;
+
+extern "C" void mock_time_reset(void);
 
 class ButtonTestSuite: public CxxTest::TestSuite
 {
@@ -26,6 +27,7 @@ public:
     pb = new Button(1,20);
     pmanager = new Updater();
 
+    mock_time_reset();
     thePins.clear();
   }
   void tearDown()
@@ -78,7 +80,7 @@ public:
     TS_ASSERT_EQUALS( pb->isPressed(), false );
   }
 
-  void testPressed( void )
+  void testIsPressed( void )
   {
     pmanager->add(pb);
     pmanager->update();
@@ -87,6 +89,27 @@ public:
     
     TS_ASSERT_EQUALS( pb->isPressed(), true );
   }
+  
+  void testWasNotPressed( void )
+  {
+    pmanager->add(pb);
+    pmanager->update();
+    delay(10);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pb->wasPressed(), false );
+  }
+  
+  void testWasPressed( void )
+  {
+    pmanager->add(pb);
+    pmanager->update();
+    delay(30);
+    pmanager->update();
+    
+    TS_ASSERT_EQUALS( pb->wasPressed(), true );
+  }
+
 
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
