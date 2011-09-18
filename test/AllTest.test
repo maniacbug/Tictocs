@@ -8,6 +8,7 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Updater.h>
 #include <IUpdate.h>
 
 using namespace std;
@@ -27,15 +28,18 @@ class AllTestSuite: public CxxTest::TestSuite
   };
 
   GetsUpdated* p;
+  Updater* pmanager;
 public:
   void setUp()
   {
     p = new GetsUpdated();
+    pmanager = new Updater();
   }
 
   void tearDown()
   {
     delete p;
+    delete pmanager;
   }
 
   void testEmptyObject( void )
@@ -51,6 +55,9 @@ public:
     TS_ASSERT_EQUALS( p->was_updated, true );
   }
 
-
+  void testEmptyUpdateManager( void )
+  {
+    TS_ASSERT_EQUALS( pmanager->size(), 0 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
