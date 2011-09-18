@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class AllTestSuite: public CxxTest::TestSuite
+class UpdateTestSuite: public CxxTest::TestSuite
 {
   struct GetsUpdated: public IUpdate
   {
