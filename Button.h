@@ -16,7 +16,17 @@ private:
   int pin;
 protected:
 public:
+  /**
+   * Constructor
+   *
+   * @param _pin Which pin the button is monitoring
+   */
   Button(int _pin): pin(_pin) {}
+
+  /**
+   * Prepare the button.  Sets the pin as output and engages the pull-up resistor
+   */
+  void begin(void) const;
 };
 
 #endif // __BUTTON_H__

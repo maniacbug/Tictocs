@@ -8,6 +8,7 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Globals.h>
 #include <Button.h>
 
 using namespace std;
@@ -23,10 +24,14 @@ public:
   void tearDown()
   {
     delete pb;
+    theLogger.setVerbose(false);
   }
 
-  void testEmpty( void )
+  void testBegin( void )
   {
+    pb->begin();
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain("1 INPUT"), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
