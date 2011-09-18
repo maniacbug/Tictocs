@@ -21,7 +21,16 @@ protected:
   /**
    * Call regularly to update status of timer
    */
-   void update(void) {}
+   void update(void) 
+   {
+     unsigned long now = millis();
+     if ( now - last_updated >= interval )
+     {
+       last_updated += interval;
+       fired = true;
+       // onFired();
+     }
+   }
 public:
   /**
    * Constructor

@@ -6,6 +6,7 @@
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <WProgram.h>
 
 // Project includes
 #include <Updater.h>
@@ -52,6 +53,7 @@ public:
     pmanager->update();
     
     TS_ASSERT_EQUALS( pt->wasFired(), true );
+    TS_ASSERT_EQUALS( pt->wasFired(), false );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

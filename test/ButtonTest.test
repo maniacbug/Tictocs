@@ -46,6 +46,8 @@ public:
 
     mock_time_reset();
     thePins.clear();
+    theLogger.clear();
+    theLogger.setRate(0);
   }
   void tearDown()
   {
