@@ -20,6 +20,10 @@ class ConnectorTestSuite: public CxxTest::TestSuite
     {
       notify("test");
     }
+    void sendFive(void)
+    {
+      notify("five");
+    }
     Sender(Connector& _conn): Connectable(_conn) {}
   };
   struct Receiver: public Connectable
@@ -30,6 +34,8 @@ class ConnectorTestSuite: public CxxTest::TestSuite
     {
       if ( !strcmp(subject,"test") )
 	++ num_received;
+      else if ( !strcmp(subject,"five") )
+	num_received += 5;
     }
   };
   Connector* pconn;
@@ -68,7 +74,17 @@ public:
   void testSendTwo( void )
   {
     precv->listen(/*from*/psend,/*subject*/"test");
+    precv->listen(/*from*/psend,/*subject*/"five");
+    psend->sendTest();
+    psend->sendFive();
+
+    TS_ASSERT_EQUALS( precv->num_received, 6 );
+  }
+  void testSendTwoSame( void )
+  {
     precv->listen(/*from*/psend,/*subject*/"test");
+    precv->listen(/*from*/psend,/*subject*/"five");
+    psend->sendTest();
     psend->sendTest();
 
     TS_ASSERT_EQUALS( precv->num_received, 2 );
