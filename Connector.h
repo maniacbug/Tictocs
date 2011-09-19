@@ -17,12 +17,12 @@ class Connectable
 private:
   Connector& conn;
 protected:
-  void notify(const char* subject);
+  void emit(const char* signal);
   virtual void onNotify(const Connectable* ,const char* ) {}
   Connectable(Connector& _conn): conn(_conn) {}
   friend class Connector;
 public:
-  void listen(const Connectable* sender,const char* subject);
+  void listen(const Connectable* emitter,const char* signal);
 };
 
 /**
@@ -31,11 +31,11 @@ public:
 
 struct Connection
 {
-  const Connectable* from;
-  char subject[20];
-  Connectable* to;
+  const Connectable* emitter;
+  char signal[20];
+  Connectable* listener;
   Connection(void) {}
-  Connection(const Connectable* _from, const char *_subject, Connectable* _to);
+  Connection(const Connectable* _emitter, const char *_signal, Connectable* _listener);
 };
 
 /**
@@ -53,7 +53,7 @@ protected:
 public:
   Connector(void): end_connections(connections) {}
   void add(Connection& connection);
-  void notify(const Connectable* sender, const char* subject);
+  void emit(const Connectable* emitter, const char* signal);
   int size(void) const { return end_connections - connections; }
 };
 

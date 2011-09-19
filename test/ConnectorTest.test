@@ -18,11 +18,11 @@ class ConnectorTestSuite: public CxxTest::TestSuite
   {
     void sendTest(void)
     {
-      notify("test");
+      emit("test");
     }
     void sendFive(void)
     {
-      notify("five");
+      emit("five");
     }
     Sender(Connector& _conn): Connectable(_conn) {}
   };
@@ -30,11 +30,11 @@ class ConnectorTestSuite: public CxxTest::TestSuite
   {
     int num_received;
     Receiver(Connector& _conn): Connectable(_conn), num_received(0) {}
-    virtual void onNotify(const Connectable* ,const char* subject)
+    virtual void onNotify(const Connectable* ,const char* signal)
     {
-      if ( !strcmp(subject,"test") )
+      if ( !strcmp(signal,"test") )
 	++ num_received;
-      else if ( !strcmp(subject,"five") )
+      else if ( !strcmp(signal,"five") )
 	num_received += 5;
     }
   };
@@ -61,20 +61,20 @@ public:
   }
   void testAdd( void )
   {
-    precv->listen(/*from*/psend,/*subject*/"test");
+    precv->listen(/*from*/psend,/*signal*/"test");
     TS_ASSERT_EQUALS( pconn->size(), 1 );
   }
   void testSend( void )
   {
-    precv->listen(/*from*/psend,/*subject*/"test");
+    precv->listen(/*from*/psend,/*signal*/"test");
     psend->sendTest();
 
     TS_ASSERT_EQUALS( precv->num_received, 1 );
   }
   void testSendTwo( void )
   {
-    precv->listen(/*from*/psend,/*subject*/"test");
-    precv->listen(/*from*/psend,/*subject*/"five");
+    precv->listen(/*from*/psend,/*signal*/"test");
+    precv->listen(/*from*/psend,/*signal*/"five");
     psend->sendTest();
     psend->sendFive();
 
@@ -82,8 +82,8 @@ public:
   }
   void testSendTwoSame( void )
   {
-    precv->listen(/*from*/psend,/*subject*/"test");
-    precv->listen(/*from*/psend,/*subject*/"five");
+    precv->listen(/*from*/psend,/*signal*/"test");
+    precv->listen(/*from*/psend,/*signal*/"five");
     psend->sendTest();
     psend->sendTest();
 
@@ -91,8 +91,8 @@ public:
   }
   void testSendMissing( void )
   {
-    precv->listen(/*from*/psend,/*subject*/"test");
-    precv->listen(/*from*/psend,/*subject*/"something");
+    precv->listen(/*from*/psend,/*signal*/"test");
+    precv->listen(/*from*/psend,/*signal*/"something");
     psend->sendTest();
 
     TS_ASSERT_EQUALS( precv->num_received, 1 );

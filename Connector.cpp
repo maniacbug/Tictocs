@@ -5,25 +5,25 @@
 // Project includes
 #include <Connector.h>
 
-void Connectable::notify(const char* subject)
+void Connectable::emit(const char* signal)
 {
-  conn.notify(this,subject);
+  conn.emit(this,signal);
 }
 
 /****************************************************************************/
 
-void Connectable::listen(const Connectable* sender,const char* subject) 
+void Connectable::listen(const Connectable* emitter,const char* signal) 
 {
-  Connection c(sender, subject, this);
+  Connection c(emitter, signal, this);
   conn.add(c);
 }
 
 /****************************************************************************/
 
-Connection::Connection(const Connectable* _from, const char *_subject, Connectable* _to):
-  from(_from), to(_to)
+Connection::Connection(const Connectable* _emitter, const char *_signal, Connectable* _listener):
+  emitter(_emitter), listener(_listener)
 {
-  strncpy(subject,_subject,sizeof(subject));
+  strncpy(signal,_signal,sizeof(signal));
 }
 
 /****************************************************************************/
@@ -36,13 +36,13 @@ void Connector::add(Connection& connection)
 
 /****************************************************************************/
 
-void Connector::notify(const Connectable* sender, const char* subject)
+void Connector::emit(const Connectable* emitter, const char* signal)
 {
   Connection *current = end_connections;
   while (current-- != connections)
   {
-    if ( current->from == sender && !strcmp(current->subject,subject))
-      current->to->onNotify(sender,subject);
+    if ( current->emitter == emitter && !strcmp(current->signal,signal))
+      current->listener->onNotify(emitter,signal);
   }
 }
 
