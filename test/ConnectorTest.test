@@ -8,18 +8,51 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Connector.h>
 
 using namespace std;
 
 class ConnectorTestSuite: public CxxTest::TestSuite
 {
+  struct Sender: public Connectable
+  {
+    void sendTest(void)
+    {
+      notify("test");
+    }
+    Sender(Connector& _conn): Connectable(_conn) {}
+  };
+  struct Receiver: public Connectable
+  {
+    int num_received;
+    Receiver(Connector& _conn): Connectable(_conn), num_received(0) {}
+    virtual void onNotify(const Connectable* ,const char* subject)
+    {
+      if ( !strcmp(subject,"test") )
+	++ num_received;
+    }
+  };
+  Connector conn;
+  Sender *psend;
+  Receiver *precv;
 public:
   void setUp()
   {
+    psend = new Sender(conn);
+    precv = new Receiver(conn);
+  }
+  void tearDown()
+  {
+    delete precv;
+    delete psend;
   }
 
-  void testEmpty( void )
+  void testSend( void )
   {
+    precv->listen(/*from*/psend,/*subject*/"test");
+    psend->sendTest();
+
+    TS_ASSERT_EQUALS( precv->num_received, 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
