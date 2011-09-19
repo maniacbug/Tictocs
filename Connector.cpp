@@ -22,7 +22,8 @@ void Connectable::listen(const Connectable* emitter,const char* signal)
 Connection::Connection(const Connectable* _emitter, const char *_signal, Connectable* _listener):
   emitter(_emitter), listener(_listener)
 {
-  strncpy(signal,_signal,sizeof(signal));
+  strncpy(signal,_signal,sizeof(signal)-1);
+  signal[sizeof(signal)-1] = 0;
 }
 
 /****************************************************************************/
