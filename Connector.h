@@ -52,7 +52,7 @@ private:
 protected:
 public:
   Connector(void): end_connections(connections) {}
-  void add(Connection& connection);
+  void add(const Connection& connection);
   void emit(const Connectable* emitter, const char* signal);
   int size(void) const { return end_connections - connections; }
 };

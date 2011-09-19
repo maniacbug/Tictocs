@@ -14,8 +14,7 @@ void Connectable::emit(const char* signal)
 
 void Connectable::listen(const Connectable* emitter,const char* signal) 
 {
-  Connection c(emitter, signal, this);
-  conn.add(c);
+  conn.add(Connection(emitter, signal, this));
 }
 
 /****************************************************************************/
@@ -28,7 +27,7 @@ Connection::Connection(const Connectable* _emitter, const char *_signal, Connect
 
 /****************************************************************************/
 
-void Connector::add(Connection& connection)
+void Connector::add(const Connection& connection)
 {
   if ( size() < max_connections )
     *end_connections++ = connection;
