@@ -32,24 +32,51 @@ class ConnectorTestSuite: public CxxTest::TestSuite
 	++ num_received;
     }
   };
-  Connector conn;
+  Connector* pconn;
   Sender *psend;
   Receiver *precv;
 public:
   void setUp()
   {
-    psend = new Sender(conn);
-    precv = new Receiver(conn);
+    pconn = new Connector;
+    psend = new Sender(*pconn);
+    precv = new Receiver(*pconn);
   }
   void tearDown()
   {
     delete precv;
     delete psend;
+    delete pconn;
   }
 
+  void testEmpty( void )
+  {
+    TS_ASSERT_EQUALS( pconn->size(), 0 );
+  }
+  void testAdd( void )
+  {
+    precv->listen(/*from*/psend,/*subject*/"test");
+    TS_ASSERT_EQUALS( pconn->size(), 1 );
+  }
   void testSend( void )
   {
     precv->listen(/*from*/psend,/*subject*/"test");
+    psend->sendTest();
+
+    TS_ASSERT_EQUALS( precv->num_received, 1 );
+  }
+  void testSendTwo( void )
+  {
+    precv->listen(/*from*/psend,/*subject*/"test");
+    precv->listen(/*from*/psend,/*subject*/"test");
+    psend->sendTest();
+
+    TS_ASSERT_EQUALS( precv->num_received, 2 );
+  }
+  void testSendMissing( void )
+  {
+    precv->listen(/*from*/psend,/*subject*/"test");
+    precv->listen(/*from*/psend,/*subject*/"something");
     psend->sendTest();
 
     TS_ASSERT_EQUALS( precv->num_received, 1 );
