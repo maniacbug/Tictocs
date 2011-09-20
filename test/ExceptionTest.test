@@ -29,17 +29,35 @@ class ExceptionTestSuite: public CxxTest::TestSuite
 	++ num_received;
     }
   };
-  Connector conn;
+  struct WhatReceiver: public Connectable
+  {
+    string what;
+    WhatReceiver(Connector& _conn): Connectable(_conn) {}
+    virtual void onNotify(const Connectable* pc,const char* signal)
+    {
+      if ( string(signal) == "exception")
+      {
+	const Exception* pe = dynamic_cast<const Exception*>(pc);
+	if ( pe )
+	{
+	  what = pe->what();
+	}
+      }
+    }
+  };
+  Connector* pconn;
   TestConnectable* pcable;
   Exception* pe;
 public:
   void setUp()
   {
-    pcable = new TestConnectable(conn);
+    pconn = new Connector;
+    pcable = new TestConnectable(*pconn);
   }
   void tearDown()
   {
     delete pcable;
+    delete pconn; 
   }
 
   void testCreate( void )
@@ -58,12 +76,22 @@ public:
   
   void testCatch( void )
   {
-    Receiver ex_handler(conn);
+    Receiver ex_handler(*pconn);
     ex_handler.listen(NULL,"exception");
     
     Exception e(pcable,"Test");
 
     TS_ASSERT_EQUALS( ex_handler.num_received , 1 )
+  }
+  
+  void testGetWhat( void )
+  {
+    WhatReceiver ex_handler(*pconn);
+    ex_handler.listen(NULL,"exception");
+    
+    Exception e(pcable,"Test");
+
+    TS_ASSERT_EQUALS( ex_handler.what, "Test" )
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

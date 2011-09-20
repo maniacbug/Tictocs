@@ -41,8 +41,8 @@ void Connector::emit(const Connectable* emitter, const char* signal)
   Connection *current = end_connections;
   while (current-- != connections)
   {
-    bool emitter_match = current->emitter == NULL || current->emitter == emitter ;
-    bool signal_match =  !strcmp(current->signal,signal);
+    bool emitter_match = ( current->emitter == NULL || current->emitter == emitter ) ;
+    bool signal_match = !strcmp(current->signal,signal);
     if ( emitter_match && signal_match )
       current->listener->onNotify(emitter,signal);
   }
