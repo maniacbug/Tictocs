@@ -15,11 +15,11 @@ class Connectable;
 class Exception
 {
 private:
-  const char* message;
+  char buffer[200];
 protected:
 public:
-  Exception(const Connectable*, const char* _message, ...): message(_message) {}
-  const char* what(void) const { return message; }
+  Exception(const Connectable*, const char* _message, ...);
+  const char* what(void) const { return buffer; }
 };
 
 #endif // __EXCEPTION_H__

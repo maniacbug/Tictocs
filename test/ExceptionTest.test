@@ -38,5 +38,12 @@ public:
 
     TS_ASSERT_EQUALS( string(e.what()) , "Test" )
   }
+  
+  void testCreateVargs( void )
+  {
+    Exception e(pcable,"Test %i",123);
+
+    TS_ASSERT_EQUALS( string(e.what()) , "Test 123" )
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
