@@ -5,20 +5,19 @@
 // C includes
 // Library includes
 // Project includes
-
-class Connectable;
+#include <Connector.h>
 
 /**
  * Exception, created by Tictacs when a runtime error occurs.
  */
 
-class Exception
+class Exception: public Connectable
 {
 private:
   char buffer[200];
 protected:
 public:
-  Exception(const Connectable*, const char* _message, ...);
+  Exception(Connectable*, const char* _message, ...);
   const char* what(void) const { return buffer; }
 };
 

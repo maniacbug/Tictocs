@@ -19,6 +19,16 @@ class ExceptionTestSuite: public CxxTest::TestSuite
   {
     TestConnectable(Connector& _conn): Connectable(_conn) {}
   };
+  struct Receiver: public Connectable
+  {
+    int num_received;
+    Receiver(Connector& _conn): Connectable(_conn), num_received(0) {}
+    virtual void onNotify(const Connectable* ,const char* signal)
+    {
+      if ( !strcmp(signal,"exception") )
+	++ num_received;
+    }
+  };
   Connector conn;
   TestConnectable* pcable;
   Exception* pe;
@@ -44,6 +54,16 @@ public:
     Exception e(pcable,"Test %i",123);
 
     TS_ASSERT_EQUALS( string(e.what()) , "Test 123" )
+  }
+  
+  void testCatch( void )
+  {
+    Receiver ex_handler(conn);
+    ex_handler.listen(NULL,"exception");
+    
+    Exception e(pcable,"Test");
+
+    TS_ASSERT_EQUALS( ex_handler.num_received , 1 )
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
