@@ -23,6 +23,7 @@ protected:
   friend class Connector;
 public:
   void listen(const Connectable* emitter,const char* signal);
+  Connector& connector(void) { return conn; }
 };
 
 /**
