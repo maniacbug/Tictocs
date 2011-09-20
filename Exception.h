@@ -15,10 +15,12 @@ class Exception: public Connectable
 {
 private:
   char buffer[200];
+  const Connectable* who_threw;
 protected:
 public:
   Exception(Connectable*, const char* _message, ...);
   const char* what(void) const { return buffer; }
+  const Connectable* who(void) const { return who_threw; }
 };
 
 #endif // __EXCEPTION_H__

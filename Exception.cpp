@@ -8,7 +8,8 @@
 
 /****************************************************************************/
 
-Exception::Exception(Connectable* pca, const char* format, ...): Connectable(pca->connector())
+Exception::Exception(Connectable* pca, const char* format, ...): 
+  Connectable(pca->connector()), who_threw(pca)
 {
   va_list ap;
   va_start(ap,format);

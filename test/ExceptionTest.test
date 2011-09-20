@@ -1,6 +1,7 @@
 // STL includes
 #include <vector>
 #include <string>
+#include <typeinfo>
 
 // C includes
 
@@ -32,6 +33,7 @@ class ExceptionTestSuite: public CxxTest::TestSuite
   struct WhatReceiver: public Connectable
   {
     string what;
+    string who;
     WhatReceiver(Connector& _conn): Connectable(_conn) {}
     virtual void onNotify(const Connectable* pc,const char* signal)
     {
@@ -41,6 +43,8 @@ class ExceptionTestSuite: public CxxTest::TestSuite
 	if ( pe )
 	{
 	  what = pe->what();
+
+	  who = typeid( *(pe->who()) ).name();
 	}
       }
     }
@@ -92,6 +96,16 @@ public:
     Exception e(pcable,"Test");
 
     TS_ASSERT_EQUALS( ex_handler.what, "Test" )
+  }
+
+  void testGetWho( void )
+  {
+    WhatReceiver ex_handler(*pconn);
+    ex_handler.listen(NULL,"exception");
+    
+    Exception e(pcable,"Test");
+
+    TS_ASSERT_EQUALS( ex_handler.who, "N18ExceptionTestSuite15TestConnectableE" )
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
