@@ -8,14 +8,21 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Exception.h>
 
 using namespace std;
 
 class ExceptionTestSuite: public CxxTest::TestSuite
 {
+  Exception* pe;
 public:
   void setUp()
   {
+    pe = new Exception;
+  }
+  void tearDown()
+  {
+    delete pe;
   }
 
   void testEmpty( void )
