@@ -97,5 +97,12 @@ public:
 
     TS_ASSERT_EQUALS( precv->num_received, 1 );
   }
+  void testNullEmitter( void )
+  {
+    precv->listen(NULL,"test");
+    psend->sendTest();
+    
+    TS_ASSERT_EQUALS( precv->num_received, 1 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
