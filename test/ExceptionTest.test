@@ -8,25 +8,35 @@
 #include <cxxtest/TestSuite.h>
 
 // Project includes
+#include <Connector.h>
 #include <Exception.h>
 
 using namespace std;
 
 class ExceptionTestSuite: public CxxTest::TestSuite
 {
+  struct TestConnectable: public Connectable
+  {
+    TestConnectable(Connector& _conn): Connectable(_conn) {}
+  };
+  Connector conn;
+  TestConnectable* pcable;
   Exception* pe;
 public:
   void setUp()
   {
-    pe = new Exception;
+    pcable = new TestConnectable(conn);
   }
   void tearDown()
   {
-    delete pe;
+    delete pcable;
   }
 
-  void testEmpty( void )
+  void testCreate( void )
   {
+    Exception e(pcable,"Test");
+
+    TS_ASSERT_EQUALS( string(e.what()) , "Test" )
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
