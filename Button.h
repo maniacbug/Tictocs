@@ -31,7 +31,7 @@ protected:
    *
    * @param duration How long the button was down
    */
-  virtual void onReleased(unsigned long) {}
+  virtual void onReleased(unsigned long) {} 
 public:
   /**
    * Constructor
