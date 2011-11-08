@@ -4,6 +4,7 @@
 #include <typeinfo>
 
 // C includes
+#include <string.h>
 
 // Library includes
 #include <cxxtest/TestSuite.h>
