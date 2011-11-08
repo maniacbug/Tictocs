@@ -1,0 +1,38 @@
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+#include <WProgram.h>
+
+// Project includes
+#include <Globals.h>
+#include <Updater.h>
+#include <EmitButton.h>
+
+using namespace std;
+
+extern "C" void mock_time_reset(void);
+
+class EmitButtonTestSuite: public CxxTest::TestSuite
+{
+  EmitButton* pb;
+public:
+  void setUp()
+  {
+    pb = new EmitButton(1,20,5,6);
+  }
+  void tearDown()
+  {
+    delete pb;
+    theLogger.setVerbose(false);
+  }
+  void testCreate()
+  {
+    TS_ASSERT(pb);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
