@@ -24,8 +24,9 @@ SKETCH_MODULES	= [ GLOB $(PDE_DIR) : *.pde *.cpp *.c ] [ GLOB $(LIBRARIES) : *.c
 
 C++		= c++ ;
 LINK 		= c++ ;
-CCFLAGS 	= -fprofile-arcs -ftest-coverage -g -O0 -fno-inline -Wall -Wextra ;
+CCFLAGS 	= -fprofile-arcs -ftest-coverage -g -fno-inline -Wall -Wextra ;
 C++FLAGS 	= $(CCFLAGS) ;
+OPTIM 	 	= -O0 ;
 LINKFLAGS	= -Wl,--no-as-needed -fprofile-arcs -lpthread -lrt -lreadline ;
 
 if ( $(OS) = MACOSX )

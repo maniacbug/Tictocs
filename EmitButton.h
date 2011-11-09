@@ -14,13 +14,19 @@
 
 class EmitButton: public Connectable, public Button
 {
+  uint8_t signal_pressed;
+  uint8_t signal_released;
+
+protected:
+  void onPressed(void);
+  void onReleased(unsigned long);
 public:
   /**
    * Constructor
    *
    * @param _pin Which pin the button is monitoring
    */
-  EmitButton(Connector& _conn,int _pin, unsigned long _interval, int /*_signal_pressed*/, int /*_signal_released*/ =0): Connectable(_conn), Button(_pin,_interval) {}
+  EmitButton(Connector& _conn,int _pin, uint8_t _signal_pressed, uint8_t signal_released = 0, unsigned long _interval = 20 );
 };
 #endif // __EMITBUTTON_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp
