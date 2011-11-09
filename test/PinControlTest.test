@@ -12,16 +12,28 @@
 
 using namespace std;
 
+extern "C" void mock_time_reset(void);
+
 class PinControlTestSuite: public CxxTest::TestSuite
 {
-  PinControl sched;
+  PinControl* ppinc;
+  Updater* pa;
+  Connector* pc;
 public:
   void setUp()
   {
-  }
+    mock_time_reset();
 
-  void testEmpty( void )
+    pa = new Updater();
+    pc = new Connector();
+    ppinc = new PinControl();
+  }
+  void tearDown()
   {
+    delete ppinc;
+    delete pc;
+    delete pa;
+    theLogger.setVerbose(false);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
