@@ -16,9 +16,26 @@ extern "C" void mock_time_reset(void);
 
 class PinControlTestSuite: public CxxTest::TestSuite
 {
+  static const int pin_number = 10;
+  static const uint8_t signal_high = 1, signal_low = 2;
+
+  struct emitter: public Connectable
+  {
+    void high(void)
+    {
+      emit(signal_high);
+    }
+    void low(void)
+    {
+      emit(signal_low);
+    }
+    emitter(Connector& conn): Connectable(conn) {}
+  };
+
   PinControl* ppinc;
   Updater* pa;
   Connector* pc;
+  emitter* pemit;
 public:
   void setUp()
   {
@@ -26,7 +43,10 @@ public:
 
     pa = new Updater();
     pc = new Connector();
-    ppinc = new PinControl();
+    ppinc = new PinControl(*pc,pin_number,signal_low,signal_high);
+    pemit = new emitter(*pc);
+    ppinc->begin();
+    ppinc->listen(pemit);
   }
   void tearDown()
   {
@@ -34,6 +54,21 @@ public:
     delete pc;
     delete pa;
     theLogger.setVerbose(false);
+  }
+  void testBegin()
+  {
+    TS_ASSERT_EQUALS(digitalRead(pin_number),0);
+  }
+  void testEmitHigh()
+  {
+    pemit->high();
+    TS_ASSERT_EQUALS(digitalRead(pin_number),1);
+  }
+  void testEmitLow()
+  {
+    thePins.hwSetDigital(pin_number,1);
+    pemit->low();
+    TS_ASSERT_EQUALS(digitalRead(pin_number),0);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
