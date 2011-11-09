@@ -6,22 +6,43 @@
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <RTClib.h>
 
 // Project includes
 #include <RtcEvent.h>
+#include <Connector.h>
+#include <Globals.h>
 
 using namespace std;
 
 class RtcEventTestSuite: public CxxTest::TestSuite
 {
-  RtcEvent sched;
+  static const uint8_t signal_go = 1;
+  RtcEvent* prtce;
+  
+  Updater* pa;
+  Connector* pc;
 public:
   void setUp()
   {
+    mock_time_reset();
+
+    pa = new Updater();
+    pc = new Connector();
+
+    prtce = new RtcEvent(*pc,DateTime(),signal_go);
+  }
+
+  void tearDown( void )
+  {
+    delete pc;
+    delete pa;
+    theLogger.setVerbose(false);
   }
 
   void testEmpty( void )
   {
+    TS_ASSERT(prtce);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
