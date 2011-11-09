@@ -16,7 +16,7 @@ Exception::Exception(Connectable* pca, const char* format, ...):
   vsnprintf(buffer,sizeof(buffer),format,ap);
   va_end(ap);
 
-  emit("exception");
+  emit(signal_exception);
 }
 
 /****************************************************************************/

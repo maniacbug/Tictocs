@@ -99,7 +99,7 @@ public:
   }
   void testNullEmitter( void )
   {
-    precv->listen(NULL,"test");
+    precv->listen(NULL,/*signal*/1);
     psend->sendTest();
     
     TS_ASSERT_EQUALS( precv->num_received, 1 );

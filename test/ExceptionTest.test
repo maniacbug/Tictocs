@@ -25,9 +25,9 @@ class ExceptionTestSuite: public CxxTest::TestSuite
   {
     int num_received;
     Receiver(Connector& _conn): Connectable(_conn), num_received(0) {}
-    virtual void onNotify(const Connectable* ,const char* signal)
+    virtual void onNotify(const Connectable* ,uint8_t signal)
     {
-      if ( !strcmp(signal,"exception") )
+      if ( signal == signal_exception )
 	++ num_received;
     }
   };
@@ -36,9 +36,9 @@ class ExceptionTestSuite: public CxxTest::TestSuite
     string what;
     string who;
     WhatReceiver(Connector& _conn): Connectable(_conn) {}
-    virtual void onNotify(const Connectable* pc,const char* signal)
+    virtual void onNotify(const Connectable* pc,uint8_t signal)
     {
-      if ( string(signal) == "exception")
+      if ( signal == signal_exception )
       {
 	const Exception* pe = dynamic_cast<const Exception*>(pc);
 	if ( pe )
@@ -82,7 +82,7 @@ public:
   void testCatch( void )
   {
     Receiver ex_handler(*pconn);
-    ex_handler.listen(NULL,"exception");
+    ex_handler.listen(NULL,signal_exception);
     
     Exception e(pcable,"Test");
 
@@ -92,7 +92,7 @@ public:
   void testGetWhat( void )
   {
     WhatReceiver ex_handler(*pconn);
-    ex_handler.listen(NULL,"exception");
+    ex_handler.listen(NULL,signal_exception);
     
     Exception e(pcable,"Test");
 
@@ -102,7 +102,7 @@ public:
   void testGetWho( void )
   {
     WhatReceiver ex_handler(*pconn);
-    ex_handler.listen(NULL,"exception");
+    ex_handler.listen(NULL,signal_exception);
     
     Exception e(pcable,"Test");
 

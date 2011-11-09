@@ -11,6 +11,8 @@
  * Exception, created by Tictacs when a runtime error occurs.
  */
 
+const uint8_t signal_exception = 0xff;
+
 class Exception: public Connectable
 {
 private:
