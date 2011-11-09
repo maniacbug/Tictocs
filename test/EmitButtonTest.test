@@ -12,6 +12,7 @@
 #include <Globals.h>
 #include <Updater.h>
 #include <EmitButton.h>
+#include <Connector.h>
 
 using namespace std;
 
@@ -19,20 +20,64 @@ extern "C" void mock_time_reset(void);
 
 class EmitButtonTestSuite: public CxxTest::TestSuite
 {
-  EmitButton* pb;
+  static const int signal_pressed = 5, signal_released = 6;
+  struct listener: public Connectable
+  {
+    int pressed, released;
+    listener(Connector& _conn): Connectable(_conn), pressed(0), released(0) {}
+    void onNotify(const Connectable*, uint8_t signal)
+    {
+      if ( signal == signal_pressed )
+	++pressed;
+      else if ( signal == signal_released )
+	++released;
+    }
+  };
+
+  EmitButton* pbutton;
+  listener* plisten;
+  Updater* pa;
+  Connector* pc;
 public:
   void setUp()
   {
-    pb = new EmitButton(1,20,5,6);
+    mock_time_reset();
+
+    pa = new Updater();
+    pc = new Connector();
+    pbutton = new EmitButton(*pc,1,20,signal_pressed,signal_released);
+    plisten = new listener(*pc);
+    plisten->listen(pbutton,signal_pressed);
+    plisten->listen(pbutton,signal_released);
   }
   void tearDown()
   {
-    delete pb;
+    delete plisten;
+    delete pbutton;
+    delete pc;
+    delete pa;
     theLogger.setVerbose(false);
   }
   void testCreate()
   {
-    TS_ASSERT(pb);
+    TS_ASSERT(pbutton);
+  }
+  void testNotPressed()
+  {
+    pa->add(pbutton);
+    pbutton->begin();
+    pa->update();
+
+    TS_ASSERT_EQUALS(plisten->pressed,0);
+  }
+  void todo_testPressed()
+  {
+    pa->add(pbutton);
+    pbutton->begin();
+    thePins.hwSetDigital(1,0);
+    pa->update();
+
+    TS_ASSERT_EQUALS(plisten->pressed,1);
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
