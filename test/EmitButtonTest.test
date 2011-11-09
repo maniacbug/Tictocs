@@ -99,5 +99,21 @@ public:
 
     TS_ASSERT_EQUALS(plisten->released,1);
   }
+  void testNoReleasedSignal()
+  {
+    pbutton = new EmitButton(*pc,1,signal_pressed);
+    pa->add(pbutton);
+    pbutton->begin();
+    thePins.hwSetDigital(1,0);
+    pa->update();
+    delay(30);
+    pa->update();
+    thePins.hwSetDigital(1,1);
+    pa->update();
+    delay(30);
+    pa->update();
+
+    TS_ASSERT_EQUALS(plisten->released,0);
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
