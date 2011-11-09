@@ -9,18 +9,50 @@
 
 // Project includes
 #include <EmitButton.h>
+#include <Connector.h>
+#include <PinControl.h>
 
 using namespace std;
 
 class IntegrationTestSuite: public CxxTest::TestSuite
 {
+  static const uint8_t signal_press = 1, signal_release = 2;
+  static const int led_pin = 13, button_pin = 9;
+  
+  Updater* pa;
+  Connector* pc;
 public:
   void setUp()
   {
+    mock_time_reset();
+
+    pa = new Updater();
+    pc = new Connector();
   }
 
-  void testEmpty( void )
+  void tearDown( void )
   {
+    delete pc;
+    delete pa;
+    theLogger.setVerbose(false);
   }
+  
+  void testLedButton( void )
+  {
+    EmitButton button(*pc, button_pin, signal_press );
+    PinControl led(*pc, led_pin, signal_release, signal_press );
+    
+    pa->add(&button);
+    button.begin();
+    led.begin();
+    led.listen(&button);
+    
+    thePins.hwSetDigital( button_pin, LOW );
+    delay(30);
+    pa->update();
+    
+    TS_ASSERT_EQUALS( thePins.hwGetDigital(led_pin), HIGH );
+  }
+  
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
