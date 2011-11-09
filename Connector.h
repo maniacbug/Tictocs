@@ -4,6 +4,11 @@
 // STL includes
 // C includes
 // Library includes
+#if ARDUINO >= 100
+#include <Arduino.h>
+#else
+#include <WProgram.h>
+#endif
 // Project includes
 
 /**
@@ -17,12 +22,12 @@ class Connectable
 private:
   Connector& conn;
 protected:
-  void emit(const char* signal);
-  virtual void onNotify(const Connectable* ,const char* ) {}
+  void emit(uint8_t signal);
+  virtual void onNotify(const Connectable* ,uint8_t ) {}
   Connectable(Connector& _conn): conn(_conn) {}
   friend class Connector;
 public:
-  void listen(const Connectable* emitter,const char* signal);
+  void listen(const Connectable* emitter,uint8_t signal);
   Connector& connector(void) { return conn; }
 };
 
@@ -33,10 +38,10 @@ public:
 struct Connection
 {
   const Connectable* emitter;
-  char signal[20];
+  uint8_t signal;
   Connectable* listener;
   Connection(void) {}
-  Connection(const Connectable* _emitter, const char *_signal, Connectable* _listener);
+  Connection(const Connectable* _emitter, uint8_t _signal, Connectable* _listener);
 };
 
 /**
@@ -46,7 +51,7 @@ struct Connection
 class Connector
 {
 public:
-  static const int max_connections = 20; /**< Max # of connections we can handle */
+  static const int max_connections = 25; /**< Max # of connections we can handle */
 private:
   Connection connections[max_connections]; /**< Set of known connections */
   Connection* end_connections; /**< Pointer just past the last known connection */
@@ -54,7 +59,7 @@ protected:
 public:
   Connector(void): end_connections(connections) {}
   void add(const Connection& connection);
-  void emit(const Connectable* emitter, const char* signal);
+  void emit(const Connectable* emitter, uint8_t signal);
   int size(void) const { return end_connections - connections; }
 };
 

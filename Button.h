@@ -31,14 +31,14 @@ protected:
    *
    * @param duration How long the button was down
    */
-  virtual void onReleased(unsigned long) {}
+  virtual void onReleased(unsigned long) {} 
 public:
   /**
    * Constructor
    *
    * @param _pin Which pin the button is monitoring
    */
-  Button(int _pin, unsigned long _interval);
+  Button(int _pin, unsigned long _interval = 20);
 
   /**
    * Prepare the button.  Sets the pin as output and engages the pull-up resistor

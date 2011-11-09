@@ -32,7 +32,7 @@ public:
    *
    * @param _interval How long to wait before firing
    */
-  Timer(unsigned long _interval): interval(_interval), last_updated(0), fired(false), enabled(true) {}
+  Timer(unsigned long _interval): interval(_interval), last_updated(millis()), fired(false), enabled(true) {}
 
   /**
    * Call regularly to update status of timer

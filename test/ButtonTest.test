@@ -59,6 +59,8 @@ public:
     thePins.clear();
     theLogger.clear();
     theLogger.setRate(0);
+    
+    pb->begin();
   }
   void tearDown()
   {
@@ -70,15 +72,11 @@ public:
 
   void testBegin( void )
   {
-    pb->begin();
-
     TS_ASSERT_EQUALS( theLogger.lines_contain("1 INPUT"), 1 );
   }
 
   void testInitialState( void )
   {
-    pb->begin();
-
     TS_ASSERT_EQUALS( pb->isPressed(), false );
   }
 
@@ -113,9 +111,11 @@ public:
 
   void testIsPressed( void )
   {
+    thePins.hwSetDigital(1,1);
     pmanager->add(pb);
     pmanager->update();
     delay(30);
+    thePins.hwSetDigital(1,0);
     pmanager->update();
     
     TS_ASSERT_EQUALS( pb->isPressed(), true );
@@ -133,9 +133,11 @@ public:
   
   void testWasPressed( void )
   {
+    thePins.hwSetDigital(1,1);
     pmanager->add(pb);
     pmanager->update();
     delay(30);
+    thePins.hwSetDigital(1,0);
     pmanager->update();
     
     TS_ASSERT_EQUALS( pb->wasPressed(), true );
@@ -157,9 +159,12 @@ public:
 
   void testOverridePressed( void )
   {
+    ptestbutton->begin();
+    thePins.hwSetDigital(2,1);
     pmanager->add(ptestbutton);
     pmanager->update();
     delay(30); 
+    thePins.hwSetDigital(2,0);
     pmanager->update();
 
     TS_ASSERT_EQUALS( ptestbutton->pressed, 1 );
@@ -167,6 +172,7 @@ public:
 
   void testOverrideNotPressed( void )
   {
+    ptestbutton->begin();
     pmanager->add(ptestbutton);
     pmanager->update();
 
@@ -175,6 +181,7 @@ public:
 
   void testOverrideNotReleased( void )
   {
+    ptestbutton->begin();
     pmanager->add(ptestbutton);
     pmanager->update();
     delay(30); 
@@ -188,12 +195,15 @@ public:
 
   void testOverrideReleased( void )
   {
+    ptestbutton->begin();
+    thePins.hwSetDigital(2,1);
     pmanager->add(ptestbutton);
     pmanager->update();
     delay(30); 
+    thePins.hwSetDigital(2,0);
     pmanager->update();
-    thePins.hwSetDigital(2,1);
     delay(30); 
+    thePins.hwSetDigital(2,1);
     pmanager->update();
 
     TS_ASSERT_EQUALS( ptestbutton->released , 1 );
@@ -201,6 +211,7 @@ public:
 
   void testMultiplePresses( void )
   {
+    ptestbutton->begin();
     const int num_presses = 5;
     pmanager->add(ptestbutton);
    
@@ -221,13 +232,16 @@ public:
   void testWithinTimeout( void )
   {
     TimeoutButton tob(3,1000);
+    tob.begin();
+    thePins.hwSetDigital(3,1);
     pmanager->add(&tob);
 
     pmanager->update();
     delay(30); 
+    thePins.hwSetDigital(3,0);
     pmanager->update();
-    thePins.hwSetDigital(3,1);
     delay(30); 
+    thePins.hwSetDigital(3,1);
     pmanager->update();
 
     TS_ASSERT_EQUALS( tob.released , 1 );
@@ -235,6 +249,7 @@ public:
   void testOutsideTimeout( void )
   {
     TimeoutButton tob(3,1000);
+    tob.begin();
     pmanager->add(&tob);
 
     pmanager->update();

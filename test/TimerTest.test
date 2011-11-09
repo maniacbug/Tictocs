@@ -31,11 +31,11 @@ class TimerTestSuite: public CxxTest::TestSuite
 public:
   void setUp()
   {
+    mock_time_reset();
+    
     pt = new Timer(200);
     pot = new TestTimer(200);
     pmanager = new Updater();
-    
-    mock_time_reset();
   }
   void tearDown()
   {
@@ -52,7 +52,7 @@ public:
   {
     pmanager->add(pt);
     pmanager->update();
-    
+
     TS_ASSERT_EQUALS( pt->wasFired(), false );
   }
   void testFired( void )

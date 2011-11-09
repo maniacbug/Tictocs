@@ -28,6 +28,17 @@ CCFLAGS 	= -fprofile-arcs -ftest-coverage -g -O0 -fno-inline -Wall -Wextra ;
 C++FLAGS 	= $(CCFLAGS) ;
 LINKFLAGS	= -Wl,--no-as-needed -fprofile-arcs -lpthread -lrt -lreadline ;
 
+if ( $(OS) = MACOSX )
+{
+	HDRS 		+= /Developer/SDKs/MacOSX10.6.sdk/usr/include ;
+	DEFINES 	+= MAC=1 ;
+	LINKFLAGS 	= -fprofile-arcs -lpthread -lreadline ;
+}
+else
+{
+	C++FLAGS	+= -std=c++0x ;
+}
+
 rule TestSuite
 {
   Depends $(<) : $(>) ;
