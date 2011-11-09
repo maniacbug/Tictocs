@@ -53,6 +53,26 @@ public:
     
     TS_ASSERT_EQUALS( thePins.hwGetDigital(led_pin), HIGH );
   }
+  void testLedButtonRelease( void )
+  {
+    EmitButton button(*pc, button_pin, signal_press, signal_release );
+    PinControl led(*pc, led_pin, signal_release, signal_press );
+    
+    pa->add(&button);
+    button.begin();
+    led.begin();
+    led.listen(&button);
+    
+    thePins.hwSetDigital( button_pin, LOW );
+    delay(30);
+    pa->update();
+
+    thePins.hwSetDigital( button_pin, HIGH );
+    delay(30);
+    pa->update();
+    
+    TS_ASSERT_EQUALS( thePins.hwGetDigital(led_pin), LOW );
+  }
   
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
