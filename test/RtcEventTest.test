@@ -29,12 +29,13 @@ public:
 
     pa = new Updater();
     pc = new Connector();
-
-    prtce = new RtcEvent(*pc,DateTime(),signal_go);
+    prtce = NULL;
   }
 
   void tearDown( void )
   {
+    if ( prtce )
+      delete prtce;
     delete pc;
     delete pa;
     theLogger.setVerbose(false);
@@ -42,7 +43,24 @@ public:
 
   void testEmpty( void )
   {
+    prtce = new RtcEvent(*pc,DateTime(),signal_go);
     TS_ASSERT(prtce);
+  }
+
+  void testUpdate( void )
+  {
+    prtce = new RtcEvent(*pc,DateTime(),signal_go);
+    pa->add(prtce);
+  }
+  
+  void testFires( void )
+  {
+#if 0
+    DateTime fire_at;
+    prtce = new RtcEvent(*pc,fire_at,signal_go);
+    listener->listen(prtce,signal_go);
+    set_time(fire_at)
+#endif
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

@@ -6,6 +6,7 @@
 // Library includes
 // Project includes
 #include <Connector.h>
+#include <IUpdate.h>
 
 class DateTime;
 
@@ -13,10 +14,11 @@ class DateTime;
  * Example for how classes should be declared
  */
 
-class RtcEvent: public Connectable
+class RtcEvent: public Connectable, public IUpdate
 {
 private:
 protected:
+  void update(void) {}
 public:
   RtcEvent(Connector& _conn,const DateTime& /*_when*/,uint8_t /*_signal_what*/): Connectable(_conn) {}
 
