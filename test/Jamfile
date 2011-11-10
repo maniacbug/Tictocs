@@ -5,8 +5,8 @@ INTERNAL_DIR	= $(CORE_DIR)/internal ;
 PDE_DIR		= $(PWD) ;
 LIBRARIES	= $(SKETCH_LIB_DIR)/Tictocs ;
 CXXTEST_DIR	= $(HOME)/Source/cxxtest ;
-CXXTEST_GEN	= $(CXXTEST_DIR)/python/scripts/cxxtestgen --error-printer ;
-#CXXTEST_GEN	= $(CXXTEST_DIR)/cxxtestgen.py --error-printer ;
+#CXXTEST_GEN	= $(CXXTEST_DIR)/python/scripts/cxxtestgen --error-printer ;
+CXXTEST_GEN	= $(CXXTEST_DIR)/cxxtestgen.py --error-printer ;
 
 HDRS		= $(CXXTEST_DIR) $(INTERNAL_DIR) $(LIBRARIES) $(PDE_DIR) $(CORE_DIR) ;
 DEFINES		+= NATIVE=1 TEST=1 ;

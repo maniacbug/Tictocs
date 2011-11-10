@@ -9,6 +9,8 @@
 
 // Project includes
 #include <PinControl.h>
+#include <Updater.h>
+#include <Globals.h>
 
 using namespace std;
 
