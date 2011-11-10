@@ -4,15 +4,13 @@
 // Project includes
 #include <RtcEvent.h>
 
-#include <RTC_native.h>
-
-const RTC_native* rtc = NULL;
+const IRtc* RtcEvent::rtc = NULL;
 
 /****************************************************************************/
 
 void RtcEvent::update(void)
 {
-  if ( active && when <= const_cast<RTC_native*>(rtc)->now().unixtime() )
+  if ( active && rtc->is_after(when) )
   {
     active = false;
     emit(signal_what);
@@ -20,8 +18,8 @@ void RtcEvent::update(void)
 }
 
 /****************************************************************************/
-RtcEvent::RtcEvent(Connector& _conn,const DateTime& _when,uint8_t _signal_what):
-	Connectable(_conn), when(_when.unixtime()), signal_what(_signal_what), active(false)
+RtcEvent::RtcEvent(Connector& _conn,uint32_t _when,uint8_t _signal_what):
+	Connectable(_conn), when(_when), signal_what(_signal_what), active(false)
 {
 }
 
@@ -30,14 +28,14 @@ RtcEvent::RtcEvent(Connector& _conn,const DateTime& _when,uint8_t _signal_what):
 void RtcEvent::begin(void)
 {
   if ( rtc )
-    active = when > const_cast<RTC_native*>(rtc)->now().unixtime();
+    active = ! rtc->is_after(when);
 }
 
 /****************************************************************************/
 
-void RtcEvent::setRtc(const RTC_native& _rtc)
+void RtcEvent::setRtc(const IRtc* _rtc)
 {
-  rtc = &_rtc;
+  rtc = _rtc;
 }
 
 /****************************************************************************/

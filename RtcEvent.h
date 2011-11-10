@@ -8,8 +8,11 @@
 #include <Connector.h>
 #include <IUpdate.h>
 
-class DateTime;
-class RTC_native;
+class IRtc
+{
+public:
+  virtual bool is_after(uint32_t _time) const =0;
+};
 
 /**
  * Example for how classes should be declared
@@ -20,13 +23,14 @@ class RtcEvent: public Connectable, public IUpdate
   uint32_t when;
   uint8_t signal_what;
   bool active;
+  static const IRtc* rtc;
 protected:
   void update(void);
 public:
-  RtcEvent(Connector& _conn,const DateTime& _when,uint8_t _signal_what);
+  RtcEvent(Connector& _conn,uint32_t _when,uint8_t _signal_what);
   void begin(void);
 
-  static void setRtc(const RTC_native& /*_rtc*/);
+  static void setRtc(const IRtc*);
 
 };
 

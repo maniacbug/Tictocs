@@ -12,10 +12,6 @@
 #include <Connector.h>
 #include <Globals.h>
 
-#include <Arduino.h>
-#include <RTClib.h>
-#include <RTC_native.h>
-
 using namespace std;
 
 class RtcEventTestSuite: public CxxTest::TestSuite
@@ -30,14 +26,18 @@ class RtcEventTestSuite: public CxxTest::TestSuite
     {
       ++fired;
     }
-  };  
-  
-  RTC_native rtc;
+  };
+  struct Rtc: public IRtc
+  {
+    uint32_t now;
+    virtual bool is_after(uint32_t when) const { return now > when; }
+  };
   
   RtcEvent* prtce;  
   Updater* pa;
   Connector* pc;
   listener* plisten;
+  Rtc rtc;
 public:
   void setUp()
   {
@@ -48,8 +48,8 @@ public:
     prtce = NULL;
     plisten = new listener(*pc);
 
-    rtc.begin();
-    RtcEvent::setRtc(rtc);
+    rtc.now = 0;
+    RtcEvent::setRtc(&rtc);
   }
 
   void tearDown( void )
@@ -64,41 +64,36 @@ public:
 
   void testEmpty( void )
   {
-    prtce = new RtcEvent(*pc,DateTime(),signal_go);
+    prtce = new RtcEvent(*pc,0,signal_go);
     TS_ASSERT(prtce);
   }
 
   void testUpdate( void )
   {
-    prtce = new RtcEvent(*pc,DateTime(),signal_go);
+    prtce = new RtcEvent(*pc,0,signal_go);
     pa->add(prtce);
   }
   
   void testFires( void )
   {
-    DateTime clock = rtc.now();
-    clock += 5;
-    prtce = new RtcEvent(*pc,clock,signal_go);
+    prtce = new RtcEvent(*pc,5,signal_go);
     prtce->begin();
     pa->add(prtce);
     plisten->listen(prtce,signal_go);
-    
-    clock += 5;
-    rtc.adjust(clock);
+   
+    rtc.now = 10;
     pa->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }
   void testDoesntFireOld( void )
   {
-    DateTime clock = rtc.now();
-    clock += -5;
-    prtce = new RtcEvent(*pc,clock,signal_go);
+    rtc.now = 5;
+    prtce = new RtcEvent(*pc,0,signal_go);
     prtce->begin();
     pa->add(prtce);
     plisten->listen(prtce,signal_go);
-    
-    clock += 5;
-    rtc.adjust(clock);
+   
+    rtc.now = 10;
     pa->update();
     TS_ASSERT_EQUALS(plisten->fired,0);
   }
