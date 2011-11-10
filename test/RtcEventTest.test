@@ -88,5 +88,19 @@ public:
     pa->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }
+  void testDoesntFireOld( void )
+  {
+    DateTime clock = rtc.now();
+    clock += -5;
+    prtce = new RtcEvent(*pc,clock,signal_go);
+    prtce->begin();
+    pa->add(prtce);
+    plisten->listen(prtce,signal_go);
+    
+    clock += 5;
+    rtc.adjust(clock);
+    pa->update();
+    TS_ASSERT_EQUALS(plisten->fired,0);
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
