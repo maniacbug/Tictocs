@@ -9,6 +9,7 @@
 #include <IUpdate.h>
 
 class DateTime;
+class RTC_native;
 
 /**
  * Example for how classes should be declared
@@ -16,11 +17,16 @@ class DateTime;
 
 class RtcEvent: public Connectable, public IUpdate
 {
-private:
+  uint32_t when;
+  uint8_t signal_what;
+  bool active;
 protected:
-  void update(void) {}
+  void update(void);
 public:
-  RtcEvent(Connector& _conn,const DateTime& /*_when*/,uint8_t /*_signal_what*/): Connectable(_conn) {}
+  RtcEvent(Connector& _conn,const DateTime& _when,uint8_t _signal_what);
+  void begin(void);
+
+  static void setRtc(const RTC_native& /*_rtc*/);
 
 };
 
