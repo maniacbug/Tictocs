@@ -12,6 +12,7 @@ class IRtc
 {
 public:
   virtual bool is_after(uint32_t _time) const =0;
+  virtual void adjust(uint32_t /*_time*/) {}
 };
 
 /**
