@@ -38,18 +38,37 @@ class ConnectorTestSuite: public CxxTest::TestSuite
 	num_received += 5;
     }
   };
+  struct Logger: public Connector::ILogger
+  {
+    const Connectable* sender;
+    const Connectable* receiver;
+    uint8_t signal;
+    virtual void log_emit(const Connectable* _sender, uint8_t _signal)
+    {
+      sender = _sender;
+      signal = _signal;
+    }
+    virtual void log_notify(const Connectable* _receiver)
+    {
+      receiver = _receiver;
+    }
+  };
+
   Connector* pconn;
   Sender *psend;
   Receiver *precv;
+  Logger* plogger;
 public:
   void setUp()
   {
     pconn = new Connector;
     psend = new Sender(*pconn);
     precv = new Receiver(*pconn);
+    plogger = new Logger();
   }
   void tearDown()
   {
+    delete plogger;
     delete precv;
     delete psend;
     delete pconn;
@@ -115,6 +134,16 @@ public:
     psend->sendTest();
     
     TS_ASSERT_EQUALS( precv->num_received, 1 );
+  }
+  void testLogger( void )
+  {
+    pconn->setLogger(plogger);
+    precv->listen(/*from*/psend,/*signal*/1);
+    psend->sendTest();
+
+    TS_ASSERT_EQUALS( plogger->sender, psend );
+    TS_ASSERT_EQUALS( plogger->signal, 1 );
+    TS_ASSERT_EQUALS( plogger->receiver, precv );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

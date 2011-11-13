@@ -52,17 +52,24 @@ class Connector
 {
 public:
   static const int max_connections = 25; /**< Max # of connections we can handle */
+  struct ILogger
+  {
+    virtual void log_emit(const Connectable*, uint8_t) =0;
+    virtual void log_notify(const Connectable*) =0;
+  };
 private:
   Connection connections[max_connections]; /**< Set of known connections */
   Connection* end_connections; /**< Pointer just past the last known connection */
+  ILogger* logger;
 protected:
   void log_emit(const Connectable*, uint8_t);
   void log_notify(const Connectable*);
 public:
-  Connector(void): end_connections(connections) {}
+  Connector(void): end_connections(connections), logger(NULL) {}
   void add(const Connection& connection);
   void emit(const Connectable* emitter, uint8_t signal);
   int size(void) const { return end_connections - connections; }
+  void setLogger(ILogger* _logger) { logger = _logger; }
 };
 
 #endif // __CONNECTOR_H__

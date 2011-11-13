@@ -56,6 +56,8 @@ void Connector::emit(const Connectable* emitter, uint8_t signal)
 void Connector::log_emit(const Connectable* p, uint8_t signal)
 {
   printf_P(PSTR("EMIT %p %i\n\r"),p,signal);
+  if ( logger )
+    logger->log_emit(p,signal);
 }
 
 /****************************************************************************/
@@ -63,6 +65,8 @@ void Connector::log_emit(const Connectable* p, uint8_t signal)
 void Connector::log_notify(const Connectable* p)
 {
   printf_P(PSTR("NOTF %p\n\r"),p);
+  if ( logger )
+    logger->log_notify(p);
 }
 
 /****************************************************************************/
