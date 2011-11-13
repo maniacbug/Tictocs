@@ -56,6 +56,8 @@ private:
   Connection connections[max_connections]; /**< Set of known connections */
   Connection* end_connections; /**< Pointer just past the last known connection */
 protected:
+  void log_emit(const Connectable*, uint8_t);
+  void log_notify(const Connectable*);
 public:
   Connector(void): end_connections(connections) {}
   void add(const Connection& connection);

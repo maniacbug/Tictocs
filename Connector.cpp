@@ -36,14 +36,33 @@ void Connector::add(const Connection& connection)
 
 void Connector::emit(const Connectable* emitter, uint8_t signal)
 {
+  log_emit(emitter,signal);
+
   Connection *current = end_connections;
   while (current-- != connections)
   {
     bool emitter_match = ( current->emitter == NULL || current->emitter == emitter ) ;
     bool signal_match = ( current->signal == signal );
     if ( emitter_match && signal_match )
+    {
+      log_notify(current->listener);
       current->listener->onNotify(emitter,signal);
+    }
   }
+}
+
+/****************************************************************************/
+
+void Connector::log_emit(const Connectable* p, uint8_t signal)
+{
+  printf_P(PSTR("EMIT %p %i\n\r"),p,signal);
+}
+
+/****************************************************************************/
+
+void Connector::log_notify(const Connectable* p)
+{
+  printf_P(PSTR("NOTF %p\n\r"),p);
 }
 
 /****************************************************************************/
