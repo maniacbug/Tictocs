@@ -10,7 +10,9 @@ const IRtc* RtcEvent::rtc = NULL;
 
 void RtcEvent::update(void)
 {
-  if ( active && rtc->is_after(when) )
+  // We actually want to fire if now is AT or after 'when', so check whether
+  // it's AFTER a second BEFORE we're supposed to fire.
+  if ( active && rtc->is_after(when-1) )
   {
     active = false;
     emit(signal_what);
