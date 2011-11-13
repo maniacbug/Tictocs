@@ -99,7 +99,7 @@ public:
   }
   void testNullEmitter( void )
   {
-    precv->listen(NULL,/*signal*/1);
+    precv->listen(/*from*/NULL,/*signal*/1);
     psend->sendTest();
     
     TS_ASSERT_EQUALS( precv->num_received, 1 );
@@ -108,6 +108,13 @@ public:
   {
     psend->sendTest();
     TS_ASSERT_EQUALS( precv->num_received, 0 );
+  }
+  void testListenAll( void )
+  {
+    precv->listen(/*from*/NULL,/*signal*/1);
+    psend->sendTest();
+    
+    TS_ASSERT_EQUALS( precv->num_received, 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
