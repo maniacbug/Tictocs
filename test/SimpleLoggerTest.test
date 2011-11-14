@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <iterator>
+#include <sstream>
 // C includes
 
 // Library includes
@@ -48,6 +49,8 @@ class SimpleLoggerTestSuite: public CxxTest::TestSuite
       num_received += signal;
     }
   };
+    
+  static const int test_signal = 1;
 
   Connector* pconn;
   Sender *psend;
@@ -59,9 +62,12 @@ public:
     pconn = new Connector;
     psend = new Sender(*pconn);
     precv = new Receiver(*pconn);
-    pSimpleLogger = new SimpleLogger();
+    pSimpleLogger = new SimpleLogger(0,10);
 
     theLogger.clear();
+    
+    pconn->setLogger(pSimpleLogger);
+    precv->listen(/*from*/psend,/*signal*/test_signal);
   }
   void tearDown()
   {
@@ -76,14 +82,34 @@ public:
   }
   void testTextLog( void )
   {
-    const int signal = 1;
+    psend->send(test_signal);
 
-    pconn->setLogger(pSimpleLogger);
-    precv->listen(/*from*/psend,/*signal*/signal);
-    psend->send(signal);
-
-    cerr << theLogger;
     TS_ASSERT_EQUALS( theLogger.lines_contain("PRTF"), 2 );
+  }
+  void testSignalSymbolReturnsOk( void )
+  {
+    bool ok = pSimpleLogger->setSignalSymbol( test_signal, "test_signal" );
+    
+    TS_ASSERT( ok );
+  }
+  void testSignalSymbolWorks( void )
+  {
+    pSimpleLogger->setSignalSymbol( test_signal, "test_signal" );
+    
+    psend->send(test_signal);
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain("test_signal"), 1 );
+  }
+  void testSignalSymbolNotFound( void )
+  {
+    pSimpleLogger->setSignalSymbol( test_signal, "test_signal" );
+    
+    psend->send(test_signal+1);
+
+    ostringstream oss;
+    oss << (test_signal+1);
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain(oss.str()), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
