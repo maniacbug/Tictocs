@@ -58,7 +58,7 @@ void SimpleLogger::log_notify(const Connectable* p)
 
 /****************************************************************************/
 
-bool SimpleLogger::setSignalSymbol(uint8_t signal, prog_char* symbol)
+bool SimpleLogger::setSymbol(uint8_t signal, prog_char* symbol)
 {
   bool result = false;
 

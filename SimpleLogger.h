@@ -46,7 +46,7 @@ public:
   // Send in number of objects & signals to make room for in the
   // dictionary
   SimpleLogger(int _num_objects, int _num_signals);
-  bool setSignalSymbol(uint8_t, prog_char*);
+  bool setSymbol(uint8_t, prog_char*);
 };
 
 #endif // __SIMPLELOGGER_H__
