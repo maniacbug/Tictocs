@@ -1,0 +1,42 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL includes
+#include <vector>
+#include <string>
+
+// C includes
+
+// Library includes
+#include <cxxtest/TestSuite.h>
+
+// Project includes
+#include <SimpleLogger.h>
+
+using namespace std;
+
+class SimpleLoggerTestSuite: public CxxTest::TestSuite
+{
+  SimpleLogger* pSimpleLogger ;
+public:
+  void setUp()
+  {
+    pSimpleLogger = new SimpleLogger();
+  }
+  
+  void tearDown()
+  {
+    delete pSimpleLogger;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pSimpleLogger);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
