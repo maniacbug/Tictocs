@@ -31,6 +31,11 @@ protected:
     uint8_t signal;
     prog_char* symbol;
   };
+  struct object_entry
+  {
+    const Connectable* object;
+    prog_char* symbol;
+  };
 private:
   int num_objects;
   int next_object;
@@ -38,15 +43,18 @@ private:
   int next_signal;
 
   signal_entry* signal_dictionary;
+  object_entry* object_dictionary;
 protected:
   virtual void log_emit(const Connectable*, uint8_t);
   virtual void log_notify(const Connectable*);
   prog_char* find_symbol(uint8_t signal);
+  prog_char* find_symbol(const Connectable* object);
 public:
   // Send in number of objects & signals to make room for in the
   // dictionary
   SimpleLogger(int _num_objects, int _num_signals);
   bool setSymbol(uint8_t, prog_char*);
+  bool setSymbol(const Connectable*, prog_char*);
 };
 
 #endif // __SIMPLELOGGER_H__

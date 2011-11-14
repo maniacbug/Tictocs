@@ -62,7 +62,7 @@ public:
     pconn = new Connector;
     psend = new Sender(*pconn);
     precv = new Receiver(*pconn);
-    pSimpleLogger = new SimpleLogger(0,10);
+    pSimpleLogger = new SimpleLogger(10,10);
 
     theLogger.clear();
     
@@ -110,6 +110,26 @@ public:
     oss << (test_signal+1);
 
     TS_ASSERT_EQUALS( theLogger.lines_contain(oss.str()), 1 );
+  }
+  void testObjectSymbolWorks( void )
+  {
+    pSimpleLogger->setSymbol( psend, "psend" );
+    
+    psend->send(test_signal);
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain("psend"), 1 );
+  }
+  void testAll( void )
+  {
+    pSimpleLogger->setSymbol( psend, "psend" );
+    pSimpleLogger->setSymbol( precv, "precv" );
+    pSimpleLogger->setSymbol( test_signal, "test_signal" );
+    
+    psend->send(test_signal);
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain("psend"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("test_signal"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("precv"), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
