@@ -9,34 +9,81 @@
 // STL includes
 #include <vector>
 #include <string>
-
+#include <iostream>
+#include <iterator>
 // C includes
 
 // Library includes
 #include <cxxtest/TestSuite.h>
+#include <Logger.h>
 
 // Project includes
 #include <SimpleLogger.h>
+#include <Globals.h>
 
 using namespace std;
 
+ostream& operator<<(ostream& os, const Logger& log)
+{
+  copy(log.begin(),log.end(),ostream_iterator<string>(os," "));
+  return os;
+}
+
 class SimpleLoggerTestSuite: public CxxTest::TestSuite
 {
+  struct Sender: public Connectable
+  {
+    void send(uint8_t signal)
+    {
+      emit(signal);
+    }
+    Sender(Connector& _conn): Connectable(_conn) {}
+  };
+  struct Receiver: public Connectable
+  {
+    int num_received;
+    Receiver(Connector& _conn): Connectable(_conn), num_received(0) {}
+    virtual void onNotify(const Connectable* ,uint8_t signal)
+    {
+      num_received += signal;
+    }
+  };
+
+  Connector* pconn;
+  Sender *psend;
+  Receiver *precv;
   SimpleLogger* pSimpleLogger ;
 public:
   void setUp()
   {
+    pconn = new Connector;
+    psend = new Sender(*pconn);
+    precv = new Receiver(*pconn);
     pSimpleLogger = new SimpleLogger();
+
+    theLogger.clear();
   }
-  
   void tearDown()
   {
     delete pSimpleLogger;
+    delete precv;
+    delete psend;
+    delete pconn;
   }
-
   void testEmpty( void )
   {
     TS_ASSERT(pSimpleLogger);
+  }
+  void testTextLog( void )
+  {
+    const int signal = 1;
+
+    pconn->setLogger(pSimpleLogger);
+    precv->listen(/*from*/psend,/*signal*/signal);
+    psend->send(signal);
+
+    cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("PRTF"), 2 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

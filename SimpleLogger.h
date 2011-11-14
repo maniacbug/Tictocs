@@ -13,15 +13,21 @@
 // C includes
 // Library includes
 // Project includes
+#include <Connector.h>
 
 /**
- * Example for how classes should be declared
+ * Simple logging for connector signals.
+ *
+ * Prints emits/notify's to screen and provides a dictionary to map values
+ * to symbolic names.
  */
 
-class SimpleLogger
+class SimpleLogger: public Connector::ILogger
 {
 private:
 protected:
+  virtual void log_emit(const Connectable*, uint8_t);
+  virtual void log_notify(const Connectable*);
 public:
 };
 
