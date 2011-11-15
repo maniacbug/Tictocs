@@ -58,6 +58,64 @@ prog_char* SimpleLogger::find_symbol(const Connectable* object)
 
 /****************************************************************************/
 
+int SimpleLogger::find_index(uint8_t signal)
+{
+  int result = -1;
+
+  int i = next_signal;
+  while(i--)
+  {
+    signal_entry* current = signal_dictionary + i;
+    if ( current->signal == signal )
+      result = i; 
+  }
+
+  return result;
+}
+
+/****************************************************************************/
+
+int SimpleLogger::find_index(const Connectable* object)
+{
+  int result = -1;
+
+  int i = next_object;
+  while(i--)
+  {
+    object_entry* current = object_dictionary + i;
+    if ( current->object == object )
+      result = i;
+  }
+
+  return result;
+}
+
+/****************************************************************************/
+
+prog_char* SimpleLogger::signal_at(uint8_t index) const
+{
+  prog_char* result = NULL;
+
+  if ( index < next_signal )
+    result = (signal_dictionary + index)->symbol;
+
+  return result;
+}
+
+/****************************************************************************/
+
+prog_char* SimpleLogger::object_at(uint8_t index) const
+{
+  prog_char* result = NULL;
+  
+  if ( index < next_object )
+    result = (object_dictionary + index)->symbol;
+
+  return result;
+}
+
+/****************************************************************************/
+
 void SimpleLogger::log_emit(const Connectable* object, uint8_t signal)
 {
   prog_char* signal_symbol = find_symbol(signal);

@@ -49,6 +49,10 @@ protected:
   virtual void log_notify(const Connectable*);
   prog_char* find_symbol(uint8_t signal);
   prog_char* find_symbol(const Connectable* object);
+  int find_index(uint8_t signal);
+  int find_index(const Connectable* object);
+  prog_char* signal_at(uint8_t index) const;
+  prog_char* object_at(uint8_t index) const;
 public:
   // Send in number of objects & signals to make room for in the
   // dictionary
