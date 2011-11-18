@@ -13,6 +13,7 @@ class IRtc
 public:
   virtual bool is_after(uint32_t _time) const =0;
   virtual void adjust(uint32_t /*_time*/) {}
+  virtual uint32_t now_unixtime(void) const { return 0; }
 };
 
 /**
