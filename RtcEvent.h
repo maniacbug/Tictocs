@@ -28,6 +28,8 @@ class RtcEvent: public Connectable, public IUpdate
   static const IRtc* rtc;
 protected:
   void update(void);
+  uint32_t get_when(void) const { return when; }
+  bool get_active(void) const { return active; }
 public:
   RtcEvent(Connector& _conn,uint32_t _when,uint8_t _signal_what);
   void begin(void);
