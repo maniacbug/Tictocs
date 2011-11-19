@@ -14,13 +14,13 @@
 class Button: public IUpdate
 {
 private:
-  int pin; /**< Which hardware pin this button is connected to. **/
+  uint8_t pin; /**< Which hardware pin this button is connected to. **/
   unsigned long interval; /**< How long the button must be pressed/released before the state change is accepted */
   unsigned long timer; /**< How long the button has been in a new state but not yet accepted */
   unsigned long time_pressed; /**< What time the button was last pressed */
-  int state; /**< Current accepted state of the button, LOW = pressed */
-  bool edge_pressed; /**< Has the button been pressed since the user last asked? */
-  bool edge_released; /**< Has the button been released since the user last asked? */
+  uint8_t state; /**< Current accepted state of the button, LOW = pressed */
+  uint8_t edge_pressed; /**< Has the button been pressed since the user last asked? */
+  uint8_t edge_released; /**< Has the button been released since the user last asked? */
 protected:
   /**
    * Called when button is pressed

@@ -14,7 +14,7 @@
 class PinControl: public Connectable
 {
 private:
-  int pin;
+  uint8_t pin;
   uint8_t signal_low;
   uint8_t signal_high;
 protected:
