@@ -47,8 +47,6 @@ private:
 protected:
   virtual void log_emit(const Connectable*, uint8_t);
   virtual void log_notify(const Connectable*);
-  prog_char* find_symbol(uint8_t signal);
-  prog_char* find_symbol(const Connectable* object);
   int find_index(uint8_t signal);
   int find_index(const Connectable* object);
   prog_char* signal_at(uint8_t index) const;
@@ -59,6 +57,8 @@ public:
   SimpleLogger(int _num_objects, int _num_signals);
   bool setSymbol(uint8_t, prog_char*);
   bool setSymbol(const Connectable*, prog_char*);
+  prog_char* find_symbol(uint8_t signal);
+  prog_char* find_symbol(const Connectable* object);
 };
 
 #endif // __SIMPLELOGGER_H__
