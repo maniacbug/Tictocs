@@ -3,6 +3,7 @@
 
 // STL includes
 // C includes
+#include <stdint.h>
 // Library includes
 // Project includes
 
@@ -14,17 +15,25 @@ class IUpdate;
 
 class Updater
 {
-public:
-  static const int max_objects = 50; /**< Max # of objects we can handle */
 private:
-  IUpdate* objects[max_objects]; /**< Set of known objects */
+  static const int default_max_objects = 50; /**< By default, max # of objects we can handle */
+  IUpdate** objects; /**< Set of known objects */
   IUpdate** end_objects; /**< Pointer just past the last known object */
+  uint16_t max_objects;  /**< Max # of objects we can handle */
 protected:
 public:
   /**
    * Create a new object updater
+   *
+   * @param max_objects Maximum number of objects that will be able to be 
+   * tracked
    */
-  Updater(void);
+  Updater(uint16_t max_objects = default_max_objects);
+  
+  /**
+   * Destructor 
+   */
+  ~Updater();
 
   /**
    * Add an object to be updated
@@ -43,7 +52,7 @@ public:
    *
    * @return Number of objects being updated
    */
-  int size(void) const { return end_objects - objects; }
+  uint16_t size(void) const { return end_objects - objects; }
 };
 
 #endif // __UPDATER_H__

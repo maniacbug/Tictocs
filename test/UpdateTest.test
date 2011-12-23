@@ -29,11 +29,13 @@ class UpdateTestSuite: public CxxTest::TestSuite
 
   GetsUpdated* p;
   Updater* pmanager;
+
+  static const uint16_t max_objects = 10;
 public:
   void setUp()
   {
     p = new GetsUpdated();
-    pmanager = new Updater();
+    pmanager = new Updater(max_objects);
   }
 
   void tearDown()
@@ -88,13 +90,13 @@ public:
     // Even if we TRY to update one too many objects, we will still only
     // add 'max_objects' objects
 
-    int i = Updater::max_objects + 1;
+    int i = max_objects + 1;
     while (i--)
       pmanager->add(p);
     
     pmanager->update();
     
-    TS_ASSERT_EQUALS( p->was_updated, Updater::max_objects );
+    TS_ASSERT_EQUALS( p->was_updated, max_objects );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

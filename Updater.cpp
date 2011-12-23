@@ -1,5 +1,6 @@
 // STL includes
 // C includes
+#include <stdlib.h>
 // Library includes
 // Project includes
 #include <Updater.h>
@@ -7,8 +8,16 @@
 
 /****************************************************************************/
 
-Updater::Updater(void): end_objects(objects) 
+Updater::Updater(uint16_t _max_objects): max_objects(_max_objects)
 {
+  objects = reinterpret_cast<IUpdate**>( malloc( sizeof(IUpdate*) * max_objects) ); 
+  end_objects = objects;
+}
+  
+Updater::~Updater()
+{
+  if ( objects )
+    delete objects;
 }
 
 /****************************************************************************/
