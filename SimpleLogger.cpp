@@ -14,7 +14,7 @@
 
 /****************************************************************************/
 
-SimpleLogger::SimpleLogger(int _num_objects, int _num_signals):
+SimpleLogger::SimpleLogger(uint8_t _num_objects, uint8_t _num_signals):
   num_objects(_num_objects), next_object(0), num_signals(_num_signals),
   next_signal(0)
 {
