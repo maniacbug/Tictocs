@@ -28,7 +28,7 @@ void Button::begin(void)
 
 void Button::update(void)
 {
-  unsigned long time_now = millis();
+  uint32_t time_now = millis();
   int state_now = digitalRead(pin);
   if ( state_now == state )
     timer = time_now;
