@@ -29,7 +29,7 @@ void Button::begin(void)
 void Button::update(void)
 {
   uint32_t time_now = millis();
-  int state_now = digitalRead(pin);
+  uint8_t state_now = digitalRead(pin)?true:false;
   if ( state_now == state )
     timer = time_now;
   else if ( time_now - timer > interval )
