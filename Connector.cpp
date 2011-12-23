@@ -5,6 +5,8 @@
 // Project includes
 #include <Connector.h>
 
+/****************************************************************************/
+
 void Connectable::emit(uint8_t signal)
 {
   conn.emit(this,signal);
@@ -23,6 +25,17 @@ Connection::Connection(const Connectable* _emitter, uint8_t _signal, Connectable
   emitter(_emitter), signal(_signal), listener(_listener)
 {
 }
+
+/****************************************************************************/
+
+Connector::Connector(uint16_t _max_connections): 
+  logger(NULL), max_connections(_max_connections)
+{
+  connections = reinterpret_cast<Connection*>( malloc( sizeof(Connection) 
+	* _max_connections ) );
+  end_connections = connections;
+}
+
 
 /****************************************************************************/
 
