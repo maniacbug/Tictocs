@@ -15,12 +15,12 @@ class Button: public IUpdate
 {
 private:
   uint8_t pin; /**< Which hardware pin this button is connected to. **/
-  unsigned long interval; /**< How long the button must be pressed/released before the state change is accepted */
-  unsigned long timer; /**< How long the button has been in a new state but not yet accepted */
-  unsigned long time_pressed; /**< What time the button was last pressed */
-  uint8_t state; /**< Current accepted state of the button, LOW = pressed */
-  uint8_t edge_pressed; /**< Has the button been pressed since the user last asked? */
-  uint8_t edge_released; /**< Has the button been released since the user last asked? */
+  uint16_t interval; /**< How long the button must be pressed/released before the state change is accepted */
+  uint32_t timer; /**< What time the button pin last changed state */ 
+  uint32_t time_pressed; /**< What time the button was last pressed */
+  uint8_t state:1; /**< Current accepted state of the button, LOW = pressed */
+  uint8_t edge_pressed:1; /**< Has the button been pressed since the user last asked? */
+  uint8_t edge_released:1; /**< Has the button been released since the user last asked? */
 protected:
   /**
    * Called when button is pressed
@@ -70,7 +70,8 @@ public:
    * @retval true Button is currently being pressed
    */
   bool isPressed(void) const;
-};
+}
+__attribute__ ((packed));
 
 #endif // __BUTTON_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp
