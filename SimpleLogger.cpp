@@ -12,6 +12,10 @@
 // Project includes
 #include <SimpleLogger.h>
 
+#ifdef __AVR__
+# undef PSTR
+# define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
+#endif
 /****************************************************************************/
 
 SimpleLogger::SimpleLogger(uint8_t _num_objects, uint8_t _num_signals):
@@ -24,9 +28,9 @@ SimpleLogger::SimpleLogger(uint8_t _num_objects, uint8_t _num_signals):
 
 /****************************************************************************/
 
-prog_char* SimpleLogger::find_symbol(uint8_t signal)
+const char* SimpleLogger::find_symbol(uint8_t signal)
 {
-  prog_char* result = NULL;
+  const char* result = NULL;
 
   int i = next_signal;
   while(i--)
@@ -41,9 +45,9 @@ prog_char* SimpleLogger::find_symbol(uint8_t signal)
 
 /****************************************************************************/
 
-prog_char* SimpleLogger::find_symbol(const Connectable* object)
+const char* SimpleLogger::find_symbol(const Connectable* object)
 {
-  prog_char* result = NULL;
+  const char* result = NULL;
 
   int i = next_object;
   while(i--)
@@ -92,9 +96,9 @@ int SimpleLogger::find_index(const Connectable* object)
 
 /****************************************************************************/
 
-prog_char* SimpleLogger::signal_at(uint8_t index) const
+const char* SimpleLogger::signal_at(uint8_t index) const
 {
-  prog_char* result = NULL;
+  const char* result = NULL;
 
   if ( index < next_signal )
     result = (signal_dictionary + index)->symbol;
@@ -104,9 +108,9 @@ prog_char* SimpleLogger::signal_at(uint8_t index) const
 
 /****************************************************************************/
 
-prog_char* SimpleLogger::object_at(uint8_t index) const
+const char* SimpleLogger::object_at(uint8_t index) const
 {
-  prog_char* result = NULL;
+  const char* result = NULL;
   
   if ( index < next_object )
     result = (object_dictionary + index)->symbol;
@@ -118,8 +122,8 @@ prog_char* SimpleLogger::object_at(uint8_t index) const
 
 void SimpleLogger::log_emit(const Connectable* object, uint8_t signal)
 {
-  prog_char* signal_symbol = find_symbol(signal);
-  prog_char* object_symbol = find_symbol(object);
+  const char* signal_symbol = find_symbol(signal);
+  const char* object_symbol = find_symbol(object);
 
   int state = (signal_symbol?1:0) + (object_symbol?2:0);
 
@@ -144,7 +148,7 @@ void SimpleLogger::log_emit(const Connectable* object, uint8_t signal)
 
 void SimpleLogger::log_notify(const Connectable* object)
 {
-  prog_char* object_symbol = find_symbol(object);
+  const char* object_symbol = find_symbol(object);
   
   if ( object_symbol )
     printf_P(PSTR("NOTF %S\n\r"),object_symbol);
@@ -154,7 +158,7 @@ void SimpleLogger::log_notify(const Connectable* object)
 
 /****************************************************************************/
 
-bool SimpleLogger::setSymbol(uint8_t signal, prog_char* symbol)
+bool SimpleLogger::setSymbol(uint8_t signal, const char* symbol)
 {
   bool result = false;
 
@@ -170,7 +174,7 @@ bool SimpleLogger::setSymbol(uint8_t signal, prog_char* symbol)
 
 /****************************************************************************/
 
-bool SimpleLogger::setSymbol(const Connectable* object, prog_char* symbol)
+bool SimpleLogger::setSymbol(const Connectable* object, const char* symbol)
 {
   bool result = false;
 
