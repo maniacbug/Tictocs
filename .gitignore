@@ -1,4 +1,6 @@
 out/
+*.orig
+*.bak
 .swp
 .*.swp
 .*.swo
