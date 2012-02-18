@@ -29,12 +29,12 @@ protected:
   struct signal_entry
   {
     uint8_t signal;
-    prog_char* symbol;
+    const char* symbol;
   };
   struct object_entry
   {
     const Connectable* object;
-    prog_char* symbol;
+    const char* symbol;
   };
 private:
   uint8_t num_objects;
@@ -49,16 +49,16 @@ protected:
   virtual void log_notify(const Connectable*);
   int find_index(uint8_t signal);
   int find_index(const Connectable* object);
-  prog_char* signal_at(uint8_t index) const;
-  prog_char* object_at(uint8_t index) const;
+  const char* signal_at(uint8_t index) const;
+  const char* object_at(uint8_t index) const;
 public:
   // Send in number of objects & signals to make room for in the
   // dictionary
   SimpleLogger(uint8_t _num_objects, uint8_t _num_signals);
-  bool setSymbol(uint8_t, prog_char*);
-  bool setSymbol(const Connectable*, prog_char*);
-  prog_char* find_symbol(uint8_t signal);
-  prog_char* find_symbol(const Connectable* object);
+  bool setSymbol(uint8_t, const char*);
+  bool setSymbol(const Connectable*, const char*);
+  const char* find_symbol(uint8_t signal);
+  const char* find_symbol(const Connectable* object);
 };
 
 #endif // __SIMPLELOGGER_H__
