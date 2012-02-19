@@ -7,6 +7,8 @@
 // Project includes
 #include <IUpdate.h>
 
+class Updater;
+
 /**
  * Manages a single push button.  Button is connected to ground when closed, floating when open
  */
@@ -44,7 +46,8 @@ public:
    * Prepare the button.  Sets the pin as output and engages the pull-up resistor
    */
   void begin(void);
-  
+  void begin(Updater&);
+
   /**
    * Update the state of the button.  Call this regularly.
    */
