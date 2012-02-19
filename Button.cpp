@@ -1,12 +1,13 @@
 // STL includes
 // C includes
-// Library includes
+// Framework includes
 #if ARDUINO >= 100
 #include <Arduino.h>
 #else
 #include <WProgram.h>
 #endif
-
+// Library includes
+#include <Updater.h>
 // Project includes
 #include <Button.h>
 
@@ -22,6 +23,14 @@ void Button::begin(void)
 {
   pinMode(pin,INPUT);
   digitalWrite(pin,HIGH);
+}
+
+/****************************************************************************/
+
+void Button::begin(Updater& up)
+{
+  begin();
+  up.add(this);
 }
 
 /****************************************************************************/
