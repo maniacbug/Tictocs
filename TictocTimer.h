@@ -3,6 +3,12 @@
 
 // STL includes
 // C includes
+// Framework includes
+#if ARDUINO >= 100
+#include <Arduino.h>
+#else
+#include <WProgram.h>
+#endif
 // Library includes
 // Project includes
 #include <IUpdate.h>
