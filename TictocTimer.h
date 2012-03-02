@@ -12,6 +12,7 @@
 // Library includes
 // Project includes
 #include <IUpdate.h>
+#include <Updater.h>
 
 namespace Tictocs
 {
@@ -39,6 +40,14 @@ public:
    * @param _interval How long to wait before firing
    */
   Timer(unsigned long _interval): interval(_interval), last_updated(millis()), fired(false), enabled(true) {}
+
+  /**
+   * Add to updater
+   */
+  void begin(Updater& up)
+  {
+    up.add(this);
+  }
 
   /**
    * Call regularly to update status of timer

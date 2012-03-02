@@ -38,4 +38,11 @@ void PinControl::onNotify(const Connectable*, uint8_t signal)
 
 /****************************************************************************/
 
+void PinControl::toggle(void)
+{
+  digitalWrite(pin,digitalRead(pin)?LOW:HIGH);
+}
+
+/****************************************************************************/
+
 // vim:cin:ai:sts=2 sw=2 ft=cpp
