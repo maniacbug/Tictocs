@@ -28,7 +28,7 @@ public:
   }
 };
 
-class TogglePinControl: public PinControl
+class PinToggle: public PinControl
 {
   uint8_t signal_toggle;
 protected:
@@ -38,7 +38,7 @@ protected:
       toggle();
   }
 public:
-  TogglePinControl(Connector& conn,uint8_t pin,uint8_t signal): PinControl(conn,pin,0,0), signal_toggle(signal)
+  PinToggle(Connector& conn,uint8_t pin,uint8_t signal): PinControl(conn,pin,0,0), signal_toggle(signal)
   {
   }
   void begin(Connectable* whom)
@@ -52,8 +52,12 @@ const uint8_t signal_toggle = 1;
 
 Connector conn;
 Updater up;
+
+// Every 500ms the timer will emit 'signal_toggle'
 EmitTimer timer(conn,500,signal_toggle);
-TogglePinControl led(conn,13,signal_toggle);
+
+// Toggle pin 13 when hearing 'signal_toggle'
+PinToggle led(conn,13,signal_toggle);
 
 //
 // Application
