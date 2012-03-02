@@ -1,6 +1,8 @@
+16000000/
 out/
 *.orig
 *.bak
 .swp
 .*.swp
 .*.swo
+version.h
