@@ -175,5 +175,25 @@ public:
 
     TS_ASSERT_EQUALS( pReceiver->num_received, 0 );
   }
+  void testReuseConnections_SizeOK( void )
+  {
+    pReceiver->listen(/*from*/pSender,/*signal*/2);
+    pReceiver->unListen(/*from*/pSender);
+    pReceiver->listen(/*from*/pSender,/*signal*/1);
+
+    // Make sure it actually re-used the slot freed by unListen
+    TS_ASSERT_EQUALS( pConnector->size(), 1 ); 
+  }
+  void testReuseConnections_Works( void )
+  {
+    pReceiver->listen(/*from*/pSender,/*signal*/2);
+    pReceiver->unListen(/*from*/pSender);
+    pReceiver->listen(/*from*/pSender,/*signal*/1);
+
+    pSender->sendTest();
+
+    // Make sure it still works 
+    TS_ASSERT_EQUALS( pReceiver->num_received, 1 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

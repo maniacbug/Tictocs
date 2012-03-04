@@ -40,7 +40,22 @@ Connection::Connection(const Connectable* _emitter, uint8_t _signal, Connectable
 
 void Connector::add(const Connection& connection)
 {
-  if ( size() < max_connections )
+  // First, look for an unused slot
+  bool done = false;
+  Connection *current = end_connections;
+  while (current-- != connections && !done)
+  {
+    // An empty slot will have a NULL listener
+    if ( ! current->listener ) 
+    {
+      // Replace this with the given connection 
+      *current = connection;
+      done = true;
+    }
+  }
+
+  // No unused slots? Add one to the end
+  if ( !done && size() < max_connections )
     *end_connections++ = connection;
 }
 
