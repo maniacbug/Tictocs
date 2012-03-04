@@ -1,0 +1,44 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL headers
+#include <vector>
+#include <string>
+#include <iostream>
+// C headers
+// Framework headers
+// Library headers
+#include <cxxtest/TestSuite.h>
+// Project headers
+// This component's header
+#include <TictocTimer.h>
+
+using namespace std;
+using namespace Tictocs;
+
+class EmitTimerTestSuite: public CxxTest::TestSuite
+{
+  Connector conn;
+  EmitTimer* pEmitTimer;
+public:
+  void setUp()
+  {
+    pEmitTimer = new EmitTimer(conn,1000,1);
+  }
+  
+  void tearDown()
+  {
+    delete pEmitTimer;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pEmitTimer);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp

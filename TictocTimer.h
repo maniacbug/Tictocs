@@ -13,6 +13,7 @@
 // Project includes
 #include <IUpdate.h>
 #include <Updater.h>
+#include <Connector.h>
 
 namespace Tictocs
 {
@@ -86,6 +87,22 @@ public:
    * Disables timer so it will never fire.  Call reset() to enable.
    */
   void disable(void) { enabled = false; }
+};
+
+/**
+ * Emit a signal on a regular interval
+ */
+class EmitTimer: public Connectable, public Timer
+{
+  uint8_t signal;
+protected:
+  virtual void onFired(void) 
+  {
+    emit(signal);
+  }
+public:
+  EmitTimer(Connector& conn,unsigned long _interval,uint8_t _signal): Connectable(conn), Timer(_interval), signal(_signal)
+  {}
 };
 
 }
