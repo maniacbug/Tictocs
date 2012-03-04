@@ -16,48 +16,35 @@
 #include <Connector.h>
 // Project headers
 
-class EmitTimer: public Connectable, public Tictocs::Timer
+class ToggleTimer: public Connectable, public Tictocs::Timer
 {
-  uint8_t signal_on_fired;
-  bool auto_reset;
+  uint8_t signal_off;
+  uint8_t signal_on;
+  bool state;
 protected:
-  virtual void onFired(void) { emit(signal_on_fired); if (auto_reset) reset(); }
+  virtual void onFired(void) 
+  {
+    state = !state;
+    emit(state?signal_on:signal_off);
+    reset(); 
+  }
 public:
-  EmitTimer(Connector& conn,unsigned long interval,uint8_t signal,bool _auto_reset=true): Connectable(conn), Timer(interval), signal_on_fired(signal), auto_reset(_auto_reset)
+  ToggleTimer(Connector& conn,unsigned long interval,uint8_t _signal_off,uint8_t _signal_on): Connectable(conn), Timer(interval), signal_off(_signal_off), signal_on(_signal_on) 
   {
   }
 };
 
-class PinToggle: public PinControl
-{
-  uint8_t signal_toggle;
-protected:
-  virtual void onNotify(const Connectable*, uint8_t signal)
-  {
-    if ( signal == signal_toggle )
-      toggle();
-  }
-public:
-  PinToggle(Connector& conn,uint8_t pin,uint8_t signal): PinControl(conn,pin,0,0), signal_toggle(signal)
-  {
-  }
-  void begin(Connectable* whom)
-  {
-    PinControl::begin();
-    Connectable::listen(whom,signal_toggle);
-  }
-};
-
-const uint8_t signal_toggle = 1;
+const uint8_t signal_low = 1;
+const uint8_t signal_high = 2;
 
 Connector conn;
 Updater up;
 
-// Every 500ms the timer will emit 'signal_toggle'
-EmitTimer timer(conn,500,signal_toggle);
+// Every 500ms the timer will alternately emit these signals 
+ToggleTimer timer(conn,500,signal_low,signal_high);
 
-// Toggle pin 13 when hearing 'signal_toggle'
-PinToggle led(conn,13,signal_toggle);
+// This controls the LED
+PinControl led(conn,13,signal_low,signal_high);
 
 //
 // Application
