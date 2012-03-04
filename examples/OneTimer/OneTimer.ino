@@ -32,10 +32,7 @@ void loop(void)
   timer.update();
 
   if ( timer.wasFired() )
-  {
-    timer.reset();
     Serial.println(millis());
-  }
 }
 
 // vim:cin:ai:sts=2 sw=2 ft=cpp
