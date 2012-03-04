@@ -26,7 +26,6 @@ protected:
   {
     state = !state;
     emit(state?signal_on:signal_off);
-    reset(); 
   }
 public:
   ToggleTimer(Connector& conn,unsigned long interval,uint8_t _signal_off,uint8_t _signal_on): Connectable(conn), Timer(interval), signal_off(_signal_off), signal_on(_signal_on) 
