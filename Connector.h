@@ -28,6 +28,7 @@ protected:
   friend class Connector;
 public:
   void listen(const Connectable* emitter,uint8_t signal);
+  void unListen(const Connectable* emitter,uint8_t signal = 0);
   Connector& connector(void) { return conn; }
 };
 
@@ -40,7 +41,7 @@ struct Connection
   const Connectable* emitter;
   uint8_t signal;
   Connectable* listener;
-  Connection(void) {}
+  Connection(void): emitter(NULL), signal(0), listener(NULL) {}
   Connection(const Connectable* _emitter, uint8_t _signal, Connectable* _listener);
 };
 
@@ -67,6 +68,7 @@ protected:
 public:
   Connector(void): end_connections(connections), logger(NULL) {}
   void add(const Connection& connection);
+  void remove(const Connection& connection);
   void emit(const Connectable* emitter, uint8_t signal);
   int size(void) const { return end_connections - connections; }
   void setLogger(ILogger* _logger) { logger = _logger; }

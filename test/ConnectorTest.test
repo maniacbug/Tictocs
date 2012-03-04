@@ -167,5 +167,13 @@ public:
 
     TS_ASSERT_EQUALS( generic.num_received, 0 );
   }
+  void testUnListen( void )
+  {
+    pReceiver->listen(/*from*/pSender,/*signal*/1);
+    pReceiver->unListen(/*from*/pSender);
+    pSender->sendTest();
+
+    TS_ASSERT_EQUALS( pReceiver->num_received, 0 );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

@@ -21,6 +21,16 @@ void Connectable::listen(const Connectable* emitter,uint8_t signal)
 
 /****************************************************************************/
 
+void Connectable::unListen(const Connectable* emitter,uint8_t signal)
+{
+  // signal == 0 is OK in this case, it means unlisten to ALL from this
+  // emitter.
+
+  conn.remove(Connection(emitter, signal, this));
+}
+
+/****************************************************************************/
+
 Connection::Connection(const Connectable* _emitter, uint8_t _signal, Connectable* _listener):
   emitter(_emitter), signal(_signal), listener(_listener)
 {
@@ -32,6 +42,25 @@ void Connector::add(const Connection& connection)
 {
   if ( size() < max_connections )
     *end_connections++ = connection;
+}
+
+/****************************************************************************/
+
+void Connector::remove(const Connection& connection)
+{
+  // Search for a matching connection in our list
+  Connection *current = end_connections;
+  while (current-- != connections)
+  {
+    bool emitter_match = ( connection.emitter == NULL || current->emitter == connection.emitter ) ;
+    bool signal_match = ( connection.signal == 0 || current->signal == connection.signal );
+    bool listener_match = ( current->listener == connection.listener );
+    if ( emitter_match && signal_match && listener_match )
+    {
+      // Replace this with an empty connection
+      *current = Connection();
+    }
+  }
 }
 
 /****************************************************************************/
@@ -49,7 +78,7 @@ void Connector::emit(const Connectable* emitter, uint8_t signal)
   {
     bool emitter_match = ( current->emitter == NULL || current->emitter == emitter ) ;
     bool signal_match = ( current->signal == signal );
-    if ( emitter_match && signal_match )
+    if ( emitter_match && signal_match && current->listener )
     {
       log_notify(current->listener);
       current->listener->onNotify(emitter,signal);
