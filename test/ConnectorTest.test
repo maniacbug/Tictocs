@@ -24,6 +24,10 @@ class ConnectorTestSuite: public CxxTest::TestSuite
     {
       emit(5);
     }
+    void send(uint8_t signal)
+    {
+      emit(signal);
+    }
     Sender(Connector& _conn): Connectable(_conn) {}
   };
   struct Receiver: public Connectable
@@ -36,6 +40,15 @@ class ConnectorTestSuite: public CxxTest::TestSuite
 	++ num_received;
       else if ( signal == 5 )
 	num_received += 5;
+    }
+  };
+  struct GenericReceiver: public Connectable
+  {
+    int num_received;
+    GenericReceiver(Connector& _conn): Connectable(_conn), num_received(0) {}
+    virtual void onNotify(const Connectable* ,uint8_t)
+    {
+      ++ num_received;
     }
   };
   struct Logger: public Connector::ILogger
@@ -144,6 +157,15 @@ public:
     TS_ASSERT_EQUALS( plogger->sender, psend );
     TS_ASSERT_EQUALS( plogger->signal, 1 );
     TS_ASSERT_EQUALS( plogger->receiver, precv );
+  }
+  void testNoListenZero( void )
+  {
+    GenericReceiver generic(*pconn); 
+    generic.listen(/*from*/psend,/*signal*/0);
+    psend->send(0);
+    psend->send(1);
+
+    TS_ASSERT_EQUALS( generic.num_received, 0 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

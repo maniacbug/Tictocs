@@ -14,7 +14,9 @@ void Connectable::emit(uint8_t signal)
 
 void Connectable::listen(const Connectable* emitter,uint8_t signal) 
 {
-  conn.add(Connection(emitter, signal, this));
+  // Filter out 0 which is an invalid signal
+  if (signal)
+    conn.add(Connection(emitter, signal, this));
 }
 
 /****************************************************************************/
@@ -36,6 +38,10 @@ void Connector::add(const Connection& connection)
 
 void Connector::emit(const Connectable* emitter, uint8_t signal)
 {
+  // Filter out 0 which is an invalid signal
+  if (!signal)
+    return;
+
   log_emit(emitter,signal);
 
   Connection *current = end_connections;
