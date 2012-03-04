@@ -28,18 +28,18 @@ class UpdateTestSuite: public CxxTest::TestSuite
   };
 
   GetsUpdated* p;
-  Updater* pmanager;
+  Updater* pUpdater;
 public:
   void setUp()
   {
     p = new GetsUpdated();
-    pmanager = new Updater();
+    pUpdater = new Updater();
   }
 
   void tearDown()
   {
     delete p;
-    delete pmanager;
+    delete pUpdater;
   }
 
   void testEmptyObject( void )
@@ -57,28 +57,28 @@ public:
 
   void testEmptyUpdateManager( void )
   {
-    TS_ASSERT_EQUALS( pmanager->size(), 0 );
+    TS_ASSERT_EQUALS( pUpdater->size(), 0 );
   }
   
   void testAddAnItem( void )
   {
-    pmanager->add(p);
-    TS_ASSERT_EQUALS( pmanager->size(), 1 );
+    pUpdater->add(p);
+    TS_ASSERT_EQUALS( pUpdater->size(), 1 );
   }
   
   void testUpdateViaManager( void )
   {
-    pmanager->add(p);
-    pmanager->update();
+    pUpdater->add(p);
+    pUpdater->update();
     TS_ASSERT_EQUALS( p->was_updated, 1 );
   }
 
   void testMultipleUpdates( void )
   {
-    pmanager->add(p);
-    pmanager->add(p);
-    pmanager->add(p);
-    pmanager->update();
+    pUpdater->add(p);
+    pUpdater->add(p);
+    pUpdater->add(p);
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( p->was_updated, 3 );
   }
@@ -90,9 +90,9 @@ public:
 
     int i = Updater::max_objects + 1;
     while (i--)
-      pmanager->add(p);
+      pUpdater->add(p);
     
-    pmanager->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( p->was_updated, Updater::max_objects );
   }

@@ -47,13 +47,13 @@ class ButtonTestSuite: public CxxTest::TestSuite
 
   Button* pb;
   TestButton* ptestbutton;
-  Updater* pmanager;
+  Updater* pUpdater;
 public:
   void setUp()
   {
     pb = new Button(1,20);
     ptestbutton = new TestButton(2);
-    pmanager = new Updater();
+    pUpdater = new Updater();
 
     mock_time_reset();
     thePins.clear();
@@ -64,7 +64,7 @@ public:
   }
   void tearDown()
   {
-    delete pmanager;
+    delete pUpdater;
     delete ptestbutton;
     delete pb;
     theLogger.setVerbose(false);
@@ -82,18 +82,18 @@ public:
 
   void testUpdate( void )
   {
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( pb->isPressed(), false );
   }
 
   void testNotYetPressed( void )
   {
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     delay(10);
-    pmanager->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( pb->isPressed(), false );
   }
@@ -101,10 +101,10 @@ public:
   void testNotEverPressed( void )
   {
     thePins.hwSetDigital(1,1);
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     delay(30);
-    pmanager->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( pb->isPressed(), false );
   }
@@ -112,21 +112,21 @@ public:
   void testIsPressed( void )
   {
     thePins.hwSetDigital(1,1);
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     delay(30);
     thePins.hwSetDigital(1,0);
-    pmanager->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( pb->isPressed(), true );
   }
   
   void testWasNotPressed( void )
   {
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     delay(10);
-    pmanager->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( pb->wasPressed(), false );
   }
@@ -134,25 +134,25 @@ public:
   void testWasPressed( void )
   {
     thePins.hwSetDigital(1,1);
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     delay(30);
     thePins.hwSetDigital(1,0);
-    pmanager->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( pb->wasPressed(), true );
   }
   
   void testWasNotReleased( void )
   {
-    pmanager->add(pb);
-    pmanager->update();
+    pUpdater->add(pb);
+    pUpdater->update();
     delay(30); 
-    pmanager->update();
+    pUpdater->update();
     // Now we have been pressed, release
     thePins.hwSetDigital(1,1);
     delay(10); 
-    pmanager->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( pb->wasReleased(), false );
   }
@@ -161,11 +161,11 @@ public:
   {
     ptestbutton->begin();
     thePins.hwSetDigital(2,1);
-    pmanager->add(ptestbutton);
-    pmanager->update();
+    pUpdater->add(ptestbutton);
+    pUpdater->update();
     delay(30); 
     thePins.hwSetDigital(2,0);
-    pmanager->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( ptestbutton->pressed, 1 );
   }
@@ -173,8 +173,8 @@ public:
   void testOverrideNotPressed( void )
   {
     ptestbutton->begin();
-    pmanager->add(ptestbutton);
-    pmanager->update();
+    pUpdater->add(ptestbutton);
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( ptestbutton->pressed, 0 );
   }
@@ -182,13 +182,13 @@ public:
   void testOverrideNotReleased( void )
   {
     ptestbutton->begin();
-    pmanager->add(ptestbutton);
-    pmanager->update();
+    pUpdater->add(ptestbutton);
+    pUpdater->update();
     delay(30); 
-    pmanager->update();
+    pUpdater->update();
     thePins.hwSetDigital(2,1);
     delay(10); 
-    pmanager->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( ptestbutton->released , 0 );
   }
@@ -197,14 +197,14 @@ public:
   {
     ptestbutton->begin();
     thePins.hwSetDigital(2,1);
-    pmanager->add(ptestbutton);
-    pmanager->update();
+    pUpdater->add(ptestbutton);
+    pUpdater->update();
     delay(30); 
     thePins.hwSetDigital(2,0);
-    pmanager->update();
+    pUpdater->update();
     delay(30); 
     thePins.hwSetDigital(2,1);
-    pmanager->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( ptestbutton->released , 1 );
   }
@@ -213,18 +213,18 @@ public:
   {
     ptestbutton->begin();
     const int num_presses = 5;
-    pmanager->add(ptestbutton);
+    pUpdater->add(ptestbutton);
    
     int i = num_presses;
     while (i--)
     {
       thePins.hwSetDigital(2,0);
-      pmanager->update();
+      pUpdater->update();
       delay(30); 
-      pmanager->update();
+      pUpdater->update();
       thePins.hwSetDigital(2,1);
       delay(30); 
-      pmanager->update();
+      pUpdater->update();
     }
     TS_ASSERT_EQUALS( ptestbutton->pressed , num_presses );
     TS_ASSERT_EQUALS( ptestbutton->released , num_presses );
@@ -234,15 +234,15 @@ public:
     TimeoutButton tob(3,1000);
     tob.begin();
     thePins.hwSetDigital(3,1);
-    pmanager->add(&tob);
+    pUpdater->add(&tob);
 
-    pmanager->update();
+    pUpdater->update();
     delay(30); 
     thePins.hwSetDigital(3,0);
-    pmanager->update();
+    pUpdater->update();
     delay(30); 
     thePins.hwSetDigital(3,1);
-    pmanager->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( tob.released , 1 );
   }
@@ -250,16 +250,16 @@ public:
   {
     TimeoutButton tob(3,1000);
     tob.begin();
-    pmanager->add(&tob);
+    pUpdater->add(&tob);
 
-    pmanager->update();
+    pUpdater->update();
     delay(50); 
-    pmanager->update();
+    pUpdater->update();
     delay(1100); 
-    pmanager->update();
+    pUpdater->update();
     thePins.hwSetDigital(3,1);
     delay(30); 
-    pmanager->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS( tob.released , 0 );
   }

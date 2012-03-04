@@ -25,121 +25,121 @@ class TimerTestSuite: public CxxTest::TestSuite
     TestTimer(unsigned long _interval): Timer(_interval), num_fired(0) {}
     void onFired(void) { ++num_fired; }
   };
-  Timer* pt;
-  TestTimer* pot;
-  Updater* pmanager;
+  Timer* pTimer;
+  TestTimer* pTestTimer;
+  Updater* pUpdater;
 public:
   void setUp()
   {
     mock_time_reset();
     
-    pt = new Timer(200);
-    pot = new TestTimer(200);
-    pmanager = new Updater();
+    pTimer = new Timer(200);
+    pTestTimer = new TestTimer(200);
+    pUpdater = new Updater();
   }
   void tearDown()
   {
-    delete pmanager;
-    delete pot;
-    delete pt;
+    delete pUpdater;
+    delete pTestTimer;
+    delete pTimer;
   }
 
   void testEmpty( void )
   {
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testUpdate( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
+    pUpdater->add(pTimer);
+    pUpdater->update();
 
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testFired( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
+    pUpdater->add(pTimer);
+    pUpdater->update();
     delay(250);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), true );
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), true );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testNotFired( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
+    pUpdater->add(pTimer);
+    pUpdater->update();
     delay(20);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testFiredTwice( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
+    pUpdater->add(pTimer);
+    pUpdater->update();
     delay(250);
-    pmanager->update();
-    pt->wasFired(); // swallow the first one
+    pUpdater->update();
+    pTimer->wasFired(); // swallow the first one
     delay(250);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), true );
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), true );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testFiredOverride( void )
   {
-    pmanager->add(pot);
-    pmanager->update();
+    pUpdater->add(pTestTimer);
+    pUpdater->update();
     delay(250);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pot->num_fired, 1 );
+    TS_ASSERT_EQUALS( pTestTimer->num_fired, 1 );
   }
   void testReset( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
+    pUpdater->add(pTimer);
+    pUpdater->update();
     delay(100);
-    pmanager->update();
-    pt->reset();
+    pUpdater->update();
+    pTimer->reset();
     delay(150);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testChangeInterval( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
-    pt->setInterval(100);
+    pUpdater->add(pTimer);
+    pUpdater->update();
+    pTimer->setInterval(100);
     delay(150);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), true );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), true );
   }
   void testDisable( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
-    pt->disable();
+    pUpdater->add(pTimer);
+    pUpdater->update();
+    pTimer->disable();
     delay(250);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), false );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), false );
   }
   void testDisableAndEnable( void )
   {
-    pmanager->add(pt);
-    pmanager->update();
-    pt->disable();
+    pUpdater->add(pTimer);
+    pUpdater->update();
+    pTimer->disable();
     delay(250);
-    pmanager->update();
-    pt->reset();
+    pUpdater->update();
+    pTimer->reset();
     delay(250);
-    pmanager->update();
+    pUpdater->update();
     
-    TS_ASSERT_EQUALS( pt->wasFired(), true );
+    TS_ASSERT_EQUALS( pTimer->wasFired(), true );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
