@@ -52,29 +52,29 @@ class SimpleLoggerTestSuite: public CxxTest::TestSuite
     
   static const int test_signal = 1;
 
-  Connector* pconn;
-  Sender *psend;
-  Receiver *precv;
+  Connector* pConnector;
+  Sender *pSender;
+  Receiver *pReceiver;
   SimpleLogger* pSimpleLogger ;
 public:
   void setUp()
   {
-    pconn = new Connector;
-    psend = new Sender(*pconn);
-    precv = new Receiver(*pconn);
+    pConnector = new Connector;
+    pSender = new Sender(*pConnector);
+    pReceiver = new Receiver(*pConnector);
     pSimpleLogger = new SimpleLogger(10,10);
 
     theLogger.clear();
     
-    pconn->setLogger(pSimpleLogger);
-    precv->listen(/*from*/psend,/*signal*/test_signal);
+    pConnector->setLogger(pSimpleLogger);
+    pReceiver->listen(/*from*/pSender,/*signal*/test_signal);
   }
   void tearDown()
   {
     delete pSimpleLogger;
-    delete precv;
-    delete psend;
-    delete pconn;
+    delete pReceiver;
+    delete pSender;
+    delete pConnector;
   }
   void testEmpty( void )
   {
@@ -82,7 +82,7 @@ public:
   }
   void testTextLog( void )
   {
-    psend->send(test_signal);
+    pSender->send(test_signal);
 
     TS_ASSERT_EQUALS( theLogger.lines_contain("PRTF"), 2 );
   }
@@ -96,7 +96,7 @@ public:
   {
     pSimpleLogger->setSymbol( test_signal, "test_signal" );
     
-    psend->send(test_signal);
+    pSender->send(test_signal);
 
     TS_ASSERT_EQUALS( theLogger.lines_contain("test_signal"), 1 );
   }
@@ -104,7 +104,7 @@ public:
   {
     pSimpleLogger->setSymbol( test_signal, "test_signal" );
     
-    psend->send(test_signal+1);
+    pSender->send(test_signal+1);
 
     ostringstream oss;
     oss << (test_signal+1);
@@ -113,23 +113,23 @@ public:
   }
   void testObjectSymbolWorks( void )
   {
-    pSimpleLogger->setSymbol( psend, "psend" );
+    pSimpleLogger->setSymbol( pSender, "pSender" );
     
-    psend->send(test_signal);
+    pSender->send(test_signal);
 
-    TS_ASSERT_EQUALS( theLogger.lines_contain("psend"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("pSender"), 1 );
   }
   void testAll( void )
   {
-    pSimpleLogger->setSymbol( psend, "psend" );
-    pSimpleLogger->setSymbol( precv, "precv" );
+    pSimpleLogger->setSymbol( pSender, "pSender" );
+    pSimpleLogger->setSymbol( pReceiver, "pReceiver" );
     pSimpleLogger->setSymbol( test_signal, "test_signal" );
     
-    psend->send(test_signal);
+    pSender->send(test_signal);
 
-    TS_ASSERT_EQUALS( theLogger.lines_contain("psend"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("pSender"), 1 );
     TS_ASSERT_EQUALS( theLogger.lines_contain("test_signal"), 1 );
-    TS_ASSERT_EQUALS( theLogger.lines_contain("precv"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("pReceiver"), 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

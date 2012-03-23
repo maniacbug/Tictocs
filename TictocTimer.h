@@ -12,6 +12,8 @@
 // Library includes
 // Project includes
 #include <IUpdate.h>
+#include <Updater.h>
+#include <Connector.h>
 
 namespace Tictocs
 {
@@ -39,6 +41,14 @@ public:
    * @param _interval How long to wait before firing
    */
   Timer(unsigned long _interval): interval(_interval), last_updated(millis()), fired(false), enabled(true) {}
+
+  /**
+   * Add to updater
+   */
+  void begin(Updater& up)
+  {
+    up.add(this);
+  }
 
   /**
    * Call regularly to update status of timer
@@ -77,6 +87,22 @@ public:
    * Disables timer so it will never fire.  Call reset() to enable.
    */
   void disable(void) { enabled = false; }
+};
+
+/**
+ * Emit a signal on a regular interval
+ */
+class EmitTimer: public Connectable, public Timer
+{
+  uint8_t signal;
+protected:
+  virtual void onFired(void) 
+  {
+    emit(signal);
+  }
+public:
+  EmitTimer(Connector& conn,unsigned long _interval,uint8_t _signal): Connectable(conn), Timer(_interval), signal(_signal)
+  {}
 };
 
 }

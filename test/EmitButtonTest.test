@@ -36,16 +36,16 @@ class EmitButtonTestSuite: public CxxTest::TestSuite
 
   EmitButton* pbutton;
   listener* plisten;
-  Updater* pa;
-  Connector* pc;
+  Updater* pUpdater;
+  Connector* pConnector;
 public:
   void setUp()
   {
     mock_time_reset();
 
-    pa = new Updater();
-    pc = new Connector();
-    plisten = new listener(*pc);
+    pUpdater = new Updater();
+    pConnector = new Connector();
+    plisten = new listener(*pConnector);
     plisten->listen(pbutton,signal_pressed);
     plisten->listen(pbutton,signal_released);
   }
@@ -53,65 +53,65 @@ public:
   {
     delete pbutton;
     delete plisten;
-    delete pc;
-    delete pa;
+    delete pConnector;
+    delete pUpdater;
     theLogger.setVerbose(false);
   }
   void testCreate()
   {
-    pbutton = new EmitButton(*pc,1,signal_pressed);
+    pbutton = new EmitButton(*pConnector,1,signal_pressed);
     TS_ASSERT(pbutton);
   }
   void testNotPressed()
   {
-    pbutton = new EmitButton(*pc,1,signal_pressed);
-    pa->add(pbutton);
+    pbutton = new EmitButton(*pConnector,1,signal_pressed);
+    pUpdater->add(pbutton);
     pbutton->begin();
-    pa->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS(plisten->pressed,0);
   }
   void testPressed()
   {
-    pbutton = new EmitButton(*pc,1,signal_pressed);
-    pa->add(pbutton);
+    pbutton = new EmitButton(*pConnector,1,signal_pressed);
+    pUpdater->add(pbutton);
     pbutton->begin();
     thePins.hwSetDigital(1,0);
-    pa->update();
+    pUpdater->update();
     delay(30);
-    pa->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS(plisten->pressed,1);
   }
   void testReleased()
   {
-    pbutton = new EmitButton(*pc,1,signal_pressed,signal_released);
-    pa->add(pbutton);
+    pbutton = new EmitButton(*pConnector,1,signal_pressed,signal_released);
+    pUpdater->add(pbutton);
     pbutton->begin();
     thePins.hwSetDigital(1,0);
-    pa->update();
+    pUpdater->update();
     delay(30);
-    pa->update();
+    pUpdater->update();
     thePins.hwSetDigital(1,1);
-    pa->update();
+    pUpdater->update();
     delay(30);
-    pa->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS(plisten->released,1);
   }
   void testNoReleasedSignal()
   {
-    pbutton = new EmitButton(*pc,1,signal_pressed);
-    pa->add(pbutton);
+    pbutton = new EmitButton(*pConnector,1,signal_pressed);
+    pUpdater->add(pbutton);
     pbutton->begin();
     thePins.hwSetDigital(1,0);
-    pa->update();
+    pUpdater->update();
     delay(30);
-    pa->update();
+    pUpdater->update();
     thePins.hwSetDigital(1,1);
-    pa->update();
+    pUpdater->update();
     delay(30);
-    pa->update();
+    pUpdater->update();
 
     TS_ASSERT_EQUALS(plisten->released,0);
   }

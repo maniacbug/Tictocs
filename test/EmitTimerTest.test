@@ -1,0 +1,80 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL headers
+#include <vector>
+#include <string>
+#include <iostream>
+// C headers
+// Framework headers
+// Library headers
+#include <cxxtest/TestSuite.h>
+// Project headers
+// This component's header
+#include <TictocTimer.h>
+
+using namespace std;
+using namespace Tictocs;
+
+class EmitTimerTestSuite: public CxxTest::TestSuite
+{
+  static const int signal_fired = 1; 
+  struct listener: public Connectable
+  {
+    int fired; 
+    listener(Connector& _conn): Connectable(_conn), fired(0) {}
+    void onNotify(const Connectable*, uint8_t signal)
+    {
+      if ( signal == signal_fired )
+	++fired;
+    }
+  };
+  EmitTimer* pEmitTimer;
+  listener* plistener;
+  Updater* pUpdater;
+  Connector* pConnector;
+public:
+  void setUp()
+  {
+    mock_time_reset();
+
+    pUpdater = new Updater();
+    pConnector = new Connector();
+    pEmitTimer = new EmitTimer(*pConnector,200,signal_fired);
+    pEmitTimer->begin(*pUpdater);
+    plistener = new listener(*pConnector);
+    plistener->listen(pEmitTimer,signal_fired);
+  }
+  
+  void tearDown()
+  {
+    delete plistener;
+    delete pEmitTimer;
+    delete pConnector;
+    delete pUpdater;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pEmitTimer);
+  }
+  void testNotFired( void )
+  {
+    pUpdater->update();
+    TS_ASSERT_EQUALS( plistener->fired, 0 );
+  }
+  void testFired( void )
+  {
+    pUpdater->update();
+    delay(250);
+    pUpdater->update();
+    
+    TS_ASSERT_EQUALS( plistener->fired, 1 );
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp

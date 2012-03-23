@@ -19,57 +19,57 @@ class IntegrationTestSuite: public CxxTest::TestSuite
   static const uint8_t signal_press = 1, signal_release = 2;
   static const int led_pin = 13, button_pin = 9;
   
-  Updater* pa;
-  Connector* pc;
+  Updater* pUpdater;
+  Connector* pConnector;
 public:
   void setUp()
   {
     mock_time_reset();
 
-    pa = new Updater();
-    pc = new Connector();
+    pUpdater = new Updater();
+    pConnector = new Connector();
   }
 
   void tearDown( void )
   {
-    delete pc;
-    delete pa;
+    delete pConnector;
+    delete pUpdater;
     theLogger.setVerbose(false);
   }
   
   void testLedButton( void )
   {
-    EmitButton button(*pc, button_pin, signal_press );
-    PinControl led(*pc, led_pin, signal_release, signal_press );
+    EmitButton button(*pConnector, button_pin, signal_press );
+    PinControl led(*pConnector, led_pin, signal_release, signal_press );
     
-    pa->add(&button);
+    pUpdater->add(&button);
     button.begin();
     led.begin();
     led.listen(&button);
     
     thePins.hwSetDigital( button_pin, LOW );
     delay(30);
-    pa->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( thePins.hwGetDigital(led_pin), HIGH );
   }
   void testLedButtonRelease( void )
   {
-    EmitButton button(*pc, button_pin, signal_press, signal_release );
-    PinControl led(*pc, led_pin, signal_release, signal_press );
+    EmitButton button(*pConnector, button_pin, signal_press, signal_release );
+    PinControl led(*pConnector, led_pin, signal_release, signal_press );
     
-    pa->add(&button);
+    pUpdater->add(&button);
     button.begin();
     led.begin();
     led.listen(&button);
     
     thePins.hwSetDigital( button_pin, LOW );
     delay(30);
-    pa->update();
+    pUpdater->update();
 
     thePins.hwSetDigital( button_pin, HIGH );
     delay(30);
-    pa->update();
+    pUpdater->update();
     
     TS_ASSERT_EQUALS( thePins.hwGetDigital(led_pin), LOW );
   }

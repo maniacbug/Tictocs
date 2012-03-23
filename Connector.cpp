@@ -16,7 +16,19 @@ void Connectable::emit(uint8_t signal)
 
 void Connectable::listen(const Connectable* emitter,uint8_t signal) 
 {
-  conn.add(Connection(emitter, signal, this));
+  // Filter out 0 which is an invalid signal
+  if (signal)
+    conn.add(Connection(emitter, signal, this));
+}
+
+/****************************************************************************/
+
+void Connectable::unListen(const Connectable* emitter,uint8_t signal)
+{
+  // signal == 0 is OK in this case, it means unlisten to ALL from this
+  // emitter.
+
+  conn.remove(Connection(emitter, signal, this));
 }
 
 /****************************************************************************/
@@ -41,14 +53,52 @@ Connector::Connector(uint16_t _max_connections):
 
 void Connector::add(const Connection& connection)
 {
-  if ( size() < max_connections )
+  // First, look for an unused slot
+  bool done = false;
+  Connection *current = end_connections;
+  while (current-- != connections && !done)
+  {
+    // An empty slot will have a NULL listener
+    if ( ! current->listener ) 
+    {
+      // Replace this with the given connection 
+      *current = connection;
+      done = true;
+    }
+  }
+
+  // No unused slots? Add one to the end
+  if ( !done && size() < max_connections )
     *end_connections++ = connection;
+}
+
+/****************************************************************************/
+
+void Connector::remove(const Connection& connection)
+{
+  // Search for a matching connection in our list
+  Connection *current = end_connections;
+  while (current-- != connections)
+  {
+    bool emitter_match = ( connection.emitter == NULL || current->emitter == connection.emitter ) ;
+    bool signal_match = ( connection.signal == 0 || current->signal == connection.signal );
+    bool listener_match = ( current->listener == connection.listener );
+    if ( emitter_match && signal_match && listener_match )
+    {
+      // Replace this with an empty connection
+      *current = Connection();
+    }
+  }
 }
 
 /****************************************************************************/
 
 void Connector::emit(const Connectable* emitter, uint8_t signal)
 {
+  // Filter out 0 which is an invalid signal
+  if (!signal)
+    return;
+
   log_emit(emitter,signal);
 
   Connection *current = end_connections;
@@ -56,7 +106,7 @@ void Connector::emit(const Connectable* emitter, uint8_t signal)
   {
     bool emitter_match = ( current->emitter == NULL || current->emitter == emitter ) ;
     bool signal_match = ( current->signal == signal );
-    if ( emitter_match && signal_match )
+    if ( emitter_match && signal_match && current->listener )
     {
       log_notify(current->listener);
       current->listener->onNotify(emitter,signal);

@@ -34,8 +34,8 @@ class RtcEventTestSuite: public CxxTest::TestSuite
   };
   
   RtcEvent* prtce;  
-  Updater* pa;
-  Connector* pc;
+  Updater* pUpdater;
+  Connector* pConnector;
   listener* plisten;
   Rtc rtc;
 public:
@@ -43,10 +43,10 @@ public:
   {
     mock_time_reset();
 
-    pa = new Updater();
-    pc = new Connector();
+    pUpdater = new Updater();
+    pConnector = new Connector();
     prtce = NULL;
-    plisten = new listener(*pc);
+    plisten = new listener(*pConnector);
 
     rtc.now = 0;
     RtcEvent::setRtc(&rtc);
@@ -57,44 +57,44 @@ public:
     delete plisten;
     if ( prtce )
       delete prtce;
-    delete pc;
-    delete pa;
+    delete pConnector;
+    delete pUpdater;
     theLogger.setVerbose(false);
   }
 
   void testEmpty( void )
   {
-    prtce = new RtcEvent(*pc,0,signal_go);
+    prtce = new RtcEvent(*pConnector,0,signal_go);
     TS_ASSERT(prtce);
   }
 
   void testUpdate( void )
   {
-    prtce = new RtcEvent(*pc,0,signal_go);
-    pa->add(prtce);
+    prtce = new RtcEvent(*pConnector,0,signal_go);
+    pUpdater->add(prtce);
   }
   
   void testFires( void )
   {
-    prtce = new RtcEvent(*pc,5,signal_go);
+    prtce = new RtcEvent(*pConnector,5,signal_go);
     prtce->begin();
-    pa->add(prtce);
+    pUpdater->add(prtce);
     plisten->listen(prtce,signal_go);
    
     rtc.now = 10;
-    pa->update();
+    pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,1);
   }
   void testDoesntFireOld( void )
   {
     rtc.now = 5;
-    prtce = new RtcEvent(*pc,0,signal_go);
+    prtce = new RtcEvent(*pConnector,0,signal_go);
     prtce->begin();
-    pa->add(prtce);
+    pUpdater->add(prtce);
     plisten->listen(prtce,signal_go);
    
     rtc.now = 10;
-    pa->update();
+    pUpdater->update();
     TS_ASSERT_EQUALS(plisten->fired,0);
   }
 };

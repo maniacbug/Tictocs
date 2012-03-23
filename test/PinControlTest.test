@@ -35,26 +35,26 @@ class PinControlTestSuite: public CxxTest::TestSuite
   };
 
   PinControl* ppinc;
-  Updater* pa;
-  Connector* pc;
+  Updater* pUpdater;
+  Connector* pConnector;
   emitter* pemit;
 public:
   void setUp()
   {
     mock_time_reset();
 
-    pa = new Updater();
-    pc = new Connector();
-    ppinc = new PinControl(*pc,pin_number,signal_low,signal_high);
-    pemit = new emitter(*pc);
+    pUpdater = new Updater();
+    pConnector = new Connector();
+    ppinc = new PinControl(*pConnector,pin_number,signal_low,signal_high);
+    pemit = new emitter(*pConnector);
     ppinc->begin();
     ppinc->listen(pemit);
   }
   void tearDown()
   {
     delete ppinc;
-    delete pc;
-    delete pa;
+    delete pConnector;
+    delete pUpdater;
     theLogger.setVerbose(false);
   }
   void testBegin()

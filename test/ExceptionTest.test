@@ -36,11 +36,11 @@ class ExceptionTestSuite: public CxxTest::TestSuite
     string what;
     string who;
     WhatReceiver(Connector& _conn): Connectable(_conn) {}
-    virtual void onNotify(const Connectable* pc,uint8_t signal)
+    virtual void onNotify(const Connectable* pConnector,uint8_t signal)
     {
       if ( signal == signal_exception )
       {
-	const Exception* pe = dynamic_cast<const Exception*>(pc);
+	const Exception* pe = dynamic_cast<const Exception*>(pConnector);
 	if ( pe )
 	{
 	  what = pe->what();
@@ -50,61 +50,61 @@ class ExceptionTestSuite: public CxxTest::TestSuite
       }
     }
   };
-  Connector* pconn;
-  TestConnectable* pcable;
+  Connector* pConnector;
+  TestConnectable* pTestConnectable;
   Exception* pe;
 public:
   void setUp()
   {
-    pconn = new Connector;
-    pcable = new TestConnectable(*pconn);
+    pConnector = new Connector;
+    pTestConnectable = new TestConnectable(*pConnector);
   }
   void tearDown()
   {
-    delete pcable;
-    delete pconn; 
+    delete pTestConnectable;
+    delete pConnector; 
   }
 
   void testCreate( void )
   {
-    Exception e(pcable,"Test");
+    Exception e(pTestConnectable,"Test");
 
     TS_ASSERT_EQUALS( string(e.what()) , "Test" )
   }
   
   void testCreateVargs( void )
   {
-    Exception e(pcable,"Test %i",123);
+    Exception e(pTestConnectable,"Test %i",123);
 
     TS_ASSERT_EQUALS( string(e.what()) , "Test 123" )
   }
   
   void testCatch( void )
   {
-    Receiver ex_handler(*pconn);
+    Receiver ex_handler(*pConnector);
     ex_handler.listen(NULL,signal_exception);
     
-    Exception e(pcable,"Test");
+    Exception e(pTestConnectable,"Test");
 
     TS_ASSERT_EQUALS( ex_handler.num_received , 1 )
   }
   
   void testGetWhat( void )
   {
-    WhatReceiver ex_handler(*pconn);
+    WhatReceiver ex_handler(*pConnector);
     ex_handler.listen(NULL,signal_exception);
     
-    Exception e(pcable,"Test");
+    Exception e(pTestConnectable,"Test");
 
     TS_ASSERT_EQUALS( ex_handler.what, "Test" )
   }
 
   void testGetWho( void )
   {
-    WhatReceiver ex_handler(*pconn);
+    WhatReceiver ex_handler(*pConnector);
     ex_handler.listen(NULL,signal_exception);
     
-    Exception e(pcable,"Test");
+    Exception e(pTestConnectable,"Test");
 
     TS_ASSERT_EQUALS( ex_handler.who, "N18ExceptionTestSuite15TestConnectableE" )
   }
