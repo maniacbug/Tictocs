@@ -10,7 +10,7 @@
 
 // Project includes
 #include <Updater.h>
-#include <Timer.h>
+#include <TTTimer.h>
 
 using namespace std;
 using namespace Tictocs;
