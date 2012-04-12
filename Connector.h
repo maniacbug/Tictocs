@@ -30,6 +30,7 @@ public:
   void listen(const Connectable* emitter,uint8_t signal);
   void unListen(const Connectable* emitter,uint8_t signal = 0);
   Connector& connector(void) { return conn; }
+  Connector& connector(void) const { return const_cast<Connectable*>(this)->conn; }
 };
 
 /**
