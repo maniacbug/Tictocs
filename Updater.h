@@ -53,6 +53,14 @@ public:
    * @return Number of objects being updated
    */
   uint16_t size(void) const { return end_objects - objects; }
+  
+  /**
+   * Determine how many objects max can be contained
+   *
+   * @return Max number of objects which can be contained in this object
+   */
+  uint16_t getMax(void) const { return max_objects; }
+
 };
 
 #endif // __UPDATER_H__
