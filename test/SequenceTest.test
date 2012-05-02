@@ -1,0 +1,147 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL headers
+#include <vector>
+#include <string>
+#include <iostream>
+// C headers
+// Framework headers
+// Library headers
+#include <Updater.h>
+#include <cxxtest/TestSuite.h>
+#include <Updater.h>
+#include <Connector.h>
+// Project headers
+// This component's header
+#include <Sequence.h>
+
+using namespace std;
+extern "C" void mock_time_reset(void);
+
+/**
+ * Static sequence statics
+ */
+
+namespace ss
+{
+  Sequence::Entry entries[] = {
+    { 0L, 1 },
+    { 1000L, 2 },
+    { 1000L, 3 },
+    { 0L, 4 },
+    { 0L, 0 },
+  };
+
+} //namespace ss
+
+class SequenceTestSuite: public CxxTest::TestSuite
+{
+  struct listener: public Connectable
+  {
+    static const int num_signals = 10;
+    int fired[num_signals];
+    listener(Connector& _conn): Connectable(_conn) 
+    {
+      memset(fired,0,sizeof(fired));
+    }
+    void onNotify(const Connectable*, uint8_t signal)
+    {
+      if ( signal < num_signals )
+	++fired[signal];
+    }
+  };
+  struct Sender: public Connectable
+  {
+    void send(uint8_t _signal)
+    {
+      emit(_signal);
+    }
+    Sender(Connector& _conn): Connectable(_conn) {}
+  };
+  Sequence* pSequenceStatic;
+  Updater* pUpdater;
+  listener* plistener;
+  Sender* pSender;
+  Connector* pConnector;
+
+  static const uint8_t signal_launch_sequence = 5;
+public:
+  void setUp()
+  {
+    mock_time_reset();
+    pConnector = new Connector();
+    pUpdater = new Updater();
+    pSequenceStatic = new Sequence(*pConnector,ss::entries,signal_launch_sequence);
+    pSequenceStatic->begin(*pUpdater);
+    plistener = new listener(*pConnector);
+    plistener->listen(NULL,1);
+    plistener->listen(NULL,2);
+    plistener->listen(NULL,3);
+    plistener->listen(NULL,4);
+    pSender = new Sender(*pConnector);
+  }
+  
+  void tearDown()
+  {
+    delete pSender;
+    delete plistener;
+    delete pSequenceStatic;
+    delete pUpdater;
+    delete pConnector;
+  }
+
+  void testNotFired( void )
+  {
+    // never fired because we don't emit the launch signal
+    delay(20000);
+    TS_ASSERT_EQUALS(pSequenceStatic->wasFired(),false);
+  }
+  void testStaticWasFired( void )
+  {
+    pSender->send(signal_launch_sequence);
+    pUpdater->update();
+    TS_ASSERT_EQUALS(plistener->fired[1],1);
+  }
+  void testStaticWasFiredNotTwice( void )
+  {
+    pSender->send(signal_launch_sequence);
+    pUpdater->update();
+    delay(900);
+    pUpdater->update();
+    
+    TS_ASSERT_EQUALS(plistener->fired[1],1);
+    TS_ASSERT_EQUALS(plistener->fired[2],0);
+  }
+  void testStaticWasFiredTwice( void )
+  {
+    pSender->send(signal_launch_sequence);
+    pUpdater->update();
+    delay(1500);
+    pUpdater->update();
+    
+    TS_ASSERT_EQUALS(plistener->fired[1],1);
+    TS_ASSERT_EQUALS(plistener->fired[2],1);
+  }
+  void testStaticWasFiredFour( void )
+  {
+    pSender->send(signal_launch_sequence);
+    pUpdater->update();
+    delay(1500);
+    pUpdater->update();
+    delay(1500);
+    pUpdater->update();
+    pUpdater->update();
+    
+    TS_ASSERT_EQUALS(plistener->fired[1],1);
+    TS_ASSERT_EQUALS(plistener->fired[2],1);
+    TS_ASSERT_EQUALS(plistener->fired[3],1);
+    TS_ASSERT_EQUALS(plistener->fired[4],1);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
