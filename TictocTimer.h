@@ -87,6 +87,11 @@ public:
    * Disables timer so it will never fire.  Call reset() to enable.
    */
   void disable(void) { enabled = false; }
+
+  /**
+   * Test whether the timer is enabled 
+   */
+  operator bool(void) const { return enabled; }
 };
 
 /**
