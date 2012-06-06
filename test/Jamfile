@@ -3,7 +3,7 @@ SKETCH_LIB_DIR	= $(SKETCH_DIR)/libraries ;
 CORE_DIR	= $(SKETCH_DIR)/hardware/native ;
 INTERNAL_DIR	= $(CORE_DIR)/internal ;
 PDE_DIR		= $(PWD) ;
-LIBRARIES	= $(SKETCH_LIB_DIR)/Tictocs ;
+LIBRARIES	= .. ; 
 CXXTEST_DIR	= $(HOME)/Source/cxxtest ;
 CXXTEST_GEN	= $(CXXTEST_DIR)/bin/cxxtestgen --error-printer ;
 
