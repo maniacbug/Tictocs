@@ -11,6 +11,8 @@
 // Project includes
 #include <Button.h>
 
+using namespace Tictocs;
+
 /****************************************************************************/
 
 Button::Button(int _pin, unsigned long _interval): pin(_pin), interval(_interval), timer(0), time_pressed(0), state(HIGH), edge_pressed(false), edge_released(false) 

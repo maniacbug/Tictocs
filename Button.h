@@ -7,6 +7,9 @@
 // Project includes
 #include <IUpdate.h>
 
+namespace Tictocs
+{
+
 class Updater;
 
 /**
@@ -75,6 +78,8 @@ public:
   bool isPressed(void) const;
 }
 __attribute__ ((packed));
+
+} // namespace Tictocs
 
 #endif // __BUTTON_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

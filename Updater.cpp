@@ -6,6 +6,8 @@
 #include <Updater.h>
 #include <IUpdate.h>
 
+using namespace Tictocs;
+
 /****************************************************************************/
 
 Updater::Updater(uint16_t _max_objects): max_objects(_max_objects)

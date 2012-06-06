@@ -12,10 +12,8 @@
 // Project includes
 #include <SimpleLogger.h>
 
-#ifdef __AVR__
-# undef PSTR
-# define PSTR(s) (__extension__({static const char __c[] PROGMEM = (s); &__c[0];}))
-#endif
+using namespace Tictocs;
+
 /****************************************************************************/
 
 SimpleLogger::SimpleLogger(uint8_t _num_objects, uint8_t _num_signals):

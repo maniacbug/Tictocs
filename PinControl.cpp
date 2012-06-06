@@ -10,6 +10,8 @@
 // Project includes
 #include <PinControl.h>
 
+using namespace Tictocs;
+
 /****************************************************************************/
 
 void PinControl::begin(void)

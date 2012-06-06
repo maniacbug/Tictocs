@@ -4,6 +4,8 @@
 // Project includes
 #include <RtcEvent.h>
 
+using namespace Tictocs;
+
 const IRtc* RtcEvent::rtc = NULL;
 
 /****************************************************************************/

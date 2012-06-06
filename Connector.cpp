@@ -5,6 +5,8 @@
 // Project includes
 #include <Connector.h>
 
+using namespace Tictocs;
+
 /****************************************************************************/
 
 void Connectable::emit(uint8_t signal)

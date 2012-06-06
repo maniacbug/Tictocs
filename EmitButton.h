@@ -8,6 +8,9 @@
 #include <Button.h>
 #include <Connector.h>
 
+namespace Tictocs
+{
+
 /**
  * Manages a single push button which emits signals on press and release
  */
@@ -28,5 +31,8 @@ public:
    */
   EmitButton(Connector& _conn,int _pin, uint8_t _signal_pressed, uint8_t signal_released = 0, unsigned long _interval = 20 );
 };
+
+} // namespace Tictocs
+
 #endif // __EMITBUTTON_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

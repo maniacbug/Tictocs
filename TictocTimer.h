@@ -105,7 +105,7 @@ public:
   {}
 };
 
-}
+} // namespace Tictocs
 
 #endif // __TIMER_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

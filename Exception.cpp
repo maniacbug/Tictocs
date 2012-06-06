@@ -6,6 +6,8 @@
 // Project includes
 #include <Exception.h>
 
+using namespace Tictocs;
+
 /****************************************************************************/
 
 Exception::Exception(Connectable* pca, const char* format, ...): 

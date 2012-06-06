@@ -13,8 +13,11 @@
 // C headers
 // Framework headers
 // Library headers
-#include <TictocTimer.h>
 // Project headers
+#include <TictocTimer.h>
+
+namespace Tictocs
+{
 
 /**
  * A sequence of signals which will be fired according to a timeline.
@@ -87,6 +90,8 @@ public:
   void begin(Updater& updater,Connectable* whom = NULL);
 
 };
+
+} // namespace Tictocs
 
 #endif // __SEQUENCE_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

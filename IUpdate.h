@@ -6,8 +6,11 @@
 // Library includes
 // Project includes
 
+namespace Tictocs
+{
+
 /**
- * Example for how classes should be declared
+ * Interface for an object which can be updated
  */
 
 class IUpdate
@@ -17,6 +20,8 @@ protected:
 public:
   virtual void update(void) = 0;
 };
+
+} // namespace Tictocs
 
 #endif // __IUPDATE_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

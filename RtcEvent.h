@@ -8,6 +8,9 @@
 #include <Connector.h>
 #include <IUpdate.h>
 
+namespace Tictocs
+{
+
 class IRtc
 {
 public:
@@ -37,6 +40,8 @@ public:
   static void setRtc(const IRtc*);
 
 };
+
+} // namespace Tictocs
 
 #endif // __RTCEVENT_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

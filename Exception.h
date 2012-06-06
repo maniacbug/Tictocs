@@ -7,6 +7,9 @@
 // Project includes
 #include <Connector.h>
 
+namespace Tictocs
+{
+
 /**
  * Exception, created by Tictacs when a runtime error occurs.
  */
@@ -24,6 +27,8 @@ public:
   const char* what(void) const { return buffer; }
   const Connectable* who(void) const { return who_threw; }
 };
+
+} // namespace Tictocs
 
 #endif // __EXCEPTION_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

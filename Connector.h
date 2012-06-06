@@ -11,6 +11,9 @@
 #endif
 // Project includes
 
+namespace Tictocs
+{
+
 /**
  * An object which can be connected to another object
  */
@@ -75,6 +78,8 @@ public:
   uint16_t size(void) const { return end_connections - connections; }
   void setLogger(ILogger* _logger) { logger = _logger; }
 };
+
+} // namespace Tictocs
 
 #endif // __CONNECTOR_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

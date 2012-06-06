@@ -7,6 +7,9 @@
 // Library includes
 // Project includes
 
+namespace Tictocs
+{
+
 class IUpdate;
 
 /**
@@ -62,6 +65,8 @@ public:
   uint16_t getMax(void) const { return max_objects; }
 
 };
+
+} // namespace Tictocs
 
 #endif // __UPDATER_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

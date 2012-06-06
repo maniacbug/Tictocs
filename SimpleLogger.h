@@ -16,6 +16,9 @@
 // Project includes
 #include <Connector.h>
 
+namespace Tictocs
+{
+
 /**
  * Simple logging for connector signals.
  *
@@ -60,6 +63,8 @@ public:
   const char* find_symbol(uint8_t signal);
   const char* find_symbol(const Connectable* object);
 };
+
+} // namespace Tictocs
 
 #endif // __SIMPLELOGGER_H__
 // vim:cin:ai:sts=2 sw=2 ft=cpp

@@ -9,10 +9,14 @@
 // STL headers
 // C headers
 // Framework headers
+#include <Arduino.h>
+#include <avr/pgmspace.h>
 // Library headers
 // Project headers
 // This component's header
 #include <Sequence.h>
+
+using namespace Tictocs;
 
 /****************************************************************************/
 

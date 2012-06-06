@@ -10,6 +10,8 @@
 // Project includes
 #include <EmitButton.h>
 
+using namespace Tictocs;
+
 /****************************************************************************/
 
 EmitButton::EmitButton(Connector& _conn,int _pin, uint8_t _signal_pressed, uint8_t _signal_released, unsigned long _interval ): 
