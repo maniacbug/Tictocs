@@ -6,11 +6,19 @@
 #include <stdint.h>
 // Library includes
 // Project includes
+#include <IUpdate.h>
 
 namespace Tictocs
 {
 
-class IUpdate;
+/**
+ * An object which is automatically managed by theUpdater.
+ */
+class Updatable: public IUpdate
+{
+public:
+  void begin();
+};
 
 /**
  * Manages a set of IUpdate objects
@@ -65,6 +73,13 @@ public:
   uint16_t getMax(void) const { return max_objects; }
 
 };
+
+/**
+ * The master updater which handles Updatable objects
+ *
+ * @todo This does eat up a lot of static memory if never used :(
+ */
+extern Updater theUpdater;
 
 } // namespace Tictocs
 

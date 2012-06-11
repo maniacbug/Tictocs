@@ -27,19 +27,34 @@ class UpdateTestSuite: public CxxTest::TestSuite
     }
   };
 
+  struct GetsUpdatedAuto: public Updatable
+  {
+    int was_updated;
+    GetsUpdatedAuto(void): was_updated(0) 
+    {
+    }
+    void update(void) 
+    {
+      ++was_updated;
+    }
+  };
+
   GetsUpdated* p;
+  GetsUpdatedAuto* pGetsUpdatedAuto;
   Updater* pUpdater;
 public:
   void setUp()
   {
     p = new GetsUpdated();
+    pGetsUpdatedAuto = new GetsUpdatedAuto();
     pUpdater = new Updater();
   }
 
   void tearDown()
   {
-    delete p;
     delete pUpdater;
+    delete pGetsUpdatedAuto;
+    delete p;
   }
 
   void testEmptyObject( void )
@@ -95,6 +110,13 @@ public:
     pUpdater->update();
     
     TS_ASSERT_EQUALS( p->was_updated, pUpdater->getMax() );
+  }
+
+  void testAutoUpdate( void )
+  {
+    pGetsUpdatedAuto->begin();
+    theUpdater.update();
+    TS_ASSERT_EQUALS( pGetsUpdatedAuto->was_updated, 1 );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

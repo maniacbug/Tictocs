@@ -10,6 +10,17 @@ using namespace Tictocs;
 
 /****************************************************************************/
 
+Updater Tictocs::theUpdater;
+
+/****************************************************************************/
+
+void Updatable::begin()
+{
+  theUpdater.add(this);
+}
+
+/****************************************************************************/
+
 Updater::Updater(uint16_t _max_objects): max_objects(_max_objects)
 {
   objects = reinterpret_cast<IUpdate**>( malloc( sizeof(IUpdate*) * max_objects) ); 
