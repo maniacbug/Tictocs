@@ -25,6 +25,8 @@ void Button::begin(void)
 {
   pinMode(pin,INPUT);
   digitalWrite(pin,HIGH);
+
+  Updatable::begin();
 }
 
 /****************************************************************************/

@@ -11,7 +11,6 @@
 #endif
 // Library includes
 // Project includes
-#include <IUpdate.h>
 #include <Updater.h>
 #include <Connector.h>
 
@@ -22,7 +21,7 @@ namespace Tictocs
  * Manage events which occur on a specified time interval
  */
 
-class Timer: public IUpdate
+class Timer: public Updatable
 {
 private:
   unsigned long interval; /**< How long to wait before firing */

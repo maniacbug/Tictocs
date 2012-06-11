@@ -5,7 +5,7 @@
 // C includes
 // Library includes
 // Project includes
-#include <IUpdate.h>
+#include <Updater.h>
 
 namespace Tictocs
 {
@@ -16,7 +16,7 @@ class Updater;
  * Manages a single push button.  Button is connected to ground when closed, floating when open
  */
 
-class Button: public IUpdate
+class Button: public Updatable 
 {
 private:
   uint8_t pin; /**< Which hardware pin this button is connected to. **/
