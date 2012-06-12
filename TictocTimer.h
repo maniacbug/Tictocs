@@ -48,6 +48,7 @@ public:
   {
     up.add(this);
   }
+  using Updatable::begin;
 
   /**
    * Call regularly to update status of timer
