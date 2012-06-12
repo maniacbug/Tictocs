@@ -32,7 +32,8 @@ class Sequence: public Connectable, public Tictocs::Timer
 {
 public:
   /**
-   * Static structure which can be used to construct a sequence
+   * A single step in the sequence.  Construct a sequence from an array
+   * of these.
    */
   struct Entry
   {
