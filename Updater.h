@@ -1,3 +1,11 @@
+/*
+ Copyright (C) 2012 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
 #ifndef __UPDATER_H__
 #define __UPDATER_H__
 
@@ -21,7 +29,9 @@ public:
 };
 
 /**
- * Manages a set of IUpdate objects
+ * Manages a set of IUpdate objects.  The basic idea behind this class is that
+ * you add all of your objects to the Updater, and then you only have to call
+ * Updater::update() once in loop().
  */
 
 class Updater

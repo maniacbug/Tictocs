@@ -1,3 +1,11 @@
+/*
+ Copyright (C) 2012 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
@@ -98,13 +106,23 @@ public:
  */
 class EmitTimer: public Connectable, public Timer
 {
-  uint8_t signal;
+  uint8_t signal; /**< The signal to emit */
 protected:
+  /**
+   * Triggered when timer is fired.
+   */
   virtual void onFired(void) 
   {
     emit(signal);
   }
 public:
+  /**
+   * Constructor
+   *
+   * @param conn Connector which we can attach to for communication
+   * @param _interval How long to wait before firing
+   * @param _signal Which signal to emit 
+   */
   EmitTimer(Connector& conn,unsigned long _interval,uint8_t _signal): Connectable(conn), Timer(_interval), signal(_signal)
   {}
 };
