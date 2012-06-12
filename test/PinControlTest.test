@@ -13,6 +13,7 @@
 #include <Globals.h>
 
 using namespace std;
+using namespace Tictocs;
 
 extern "C" void mock_time_reset(void);
 
