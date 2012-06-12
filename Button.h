@@ -67,16 +67,16 @@ public:
   /**
    * Test whether the button has been pressed since we last asked
    *
-   * @retval true Pressed since this method was last called
+   * @retval Pressed since this method was last called
    */
   bool wasPressed(void);
 
   /**
    * Test whether the button has been released since we last asked
    *
-   * @retval true Released since this method was last called
+   * @return How long (ms) the button was held down, or 0 if was not recently released 
    */
-  bool wasReleased(void);
+  unsigned wasReleased(void);
 
   /**
    * Get current known state of the button

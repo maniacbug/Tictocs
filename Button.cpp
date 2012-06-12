@@ -82,11 +82,11 @@ bool Button::wasPressed(void)
 
 /****************************************************************************/
 
-bool Button::wasReleased(void) 
+unsigned Button::wasReleased(void) 
 { 
   bool result = edge_released; 
   edge_released = false; 
-  return result; 
+  return result ? millis() - time_pressed : 0; 
 }
 
 /****************************************************************************/
