@@ -6,8 +6,8 @@
  version 2 as published by the Free Software Foundation.
  */
 
-#ifndef __TIMER_H__
-#define __TIMER_H__
+#ifndef __TICTOCS_TIMER_H__
+#define __TICTOCS_TIMER_H__
 
 // STL includes
 // C includes
